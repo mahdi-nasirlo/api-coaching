@@ -2,8 +2,10 @@
 
 namespace Modules\Meeting\Entities;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Modules\Meeting\Database\factories\CoachFactory;
+use Modules\Meeting\Enums\CoachStatusEnum;
 
 class Coach extends Model
 {
@@ -11,8 +13,10 @@ class Coach extends Model
 
     protected $guarded = ['created_at', 'updated_at'];
 
-    protected static function newFactory()
+    protected $casts = ['status' => CoachStatusEnum::class];
+
+    protected static function newFactory(): CoachFactory
     {
-        return \Modules\Meeting\Database\factories\CoachFactory::new();
+        return CoachFactory::new();
     }
 }
