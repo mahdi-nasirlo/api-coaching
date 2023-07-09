@@ -18,6 +18,9 @@ use Modules\Meeting\Scopes\AcceptedCoachScope;
  * @property int $user_id
  * @property string $name
  * @property string $user_name
+ * @property string $avatar
+ * @property integer $hourly_price
+ * @property CoachStatusEnum $status
 */
 
 class Coach extends Model

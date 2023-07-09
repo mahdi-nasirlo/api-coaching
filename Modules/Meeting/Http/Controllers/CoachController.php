@@ -4,14 +4,19 @@ namespace Modules\Meeting\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
+use Modules\Meeting\Entities\Coach;
+use Modules\Meeting\Transformers\Coach\CoachListResource;
 
 class CoachController extends Controller
 {
 
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
-        return view('meeting::index');
+        $coaches = Coach::paginate();
+
+        return CoachListResource::collection($coaches);
     }
 
     public function create()
