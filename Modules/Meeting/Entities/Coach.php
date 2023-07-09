@@ -6,8 +6,11 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Modules\Category\Entities\Category;
 use Modules\Meeting\Database\factories\CoachFactory;
 use Modules\Meeting\Enums\CoachStatusEnum;
+use Modules\Meeting\Observers\CoachObserver;
 use Modules\Meeting\Scopes\AcceptedCoachScope;
 
 /**
@@ -30,12 +33,17 @@ class Coach extends Model
     protected static function booted(): void
     {
         static::addGlobalScope(new AcceptedCoachScope());
-        self::observe(\CoachObserver::class);
+        self::observe(CoachObserver::class);
     }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function category(): MorphMany
+    {
+        return $this->morphMany(Category::class,'categories');
     }
 
     public function coachInfo(): BelongsTo

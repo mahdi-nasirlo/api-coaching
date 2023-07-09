@@ -1,5 +1,7 @@
 <?php
 
+namespace Modules\Meeting\Observers;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Modules\Meeting\Entities\Coach;
