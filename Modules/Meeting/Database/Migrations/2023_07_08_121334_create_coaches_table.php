@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('avatar');
+            $table->string('user_name');
             $table->unsignedBigInteger('hourly_price');
             $table->tinyInteger('status')->default(0);
             $table->foreignId('user_id')->constrained('users');

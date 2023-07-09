@@ -10,6 +10,13 @@ use Modules\Meeting\Database\factories\CoachFactory;
 use Modules\Meeting\Enums\CoachStatusEnum;
 use Modules\Meeting\Scopes\AcceptedCoachScope;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property string $name
+ * @property string $user_name
+*/
+
 class Coach extends Model
 {
     use HasFactory;
@@ -18,9 +25,12 @@ class Coach extends Model
 
     protected $casts = ['status' => CoachStatusEnum::class];
 
+    protected $observables = [];
+
     protected static function booted(): void
     {
         static::addGlobalScope(new AcceptedCoachScope());
+        self::observe(\CoachObserver::class);
     }
 
     public function user(): BelongsTo
