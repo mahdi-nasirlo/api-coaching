@@ -2,6 +2,7 @@
 
 namespace Modules\Meeting\Database\factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\Meeting\Entities\Coach;
 use Modules\Meeting\Enums\CoachStatusEnum;
@@ -27,6 +28,7 @@ class CoachFactory extends Factory
             'avatar' => '/default-avatar.jpg',
             'hourly_price' => rand(10, 200) * 1000,
             'status' => CoachStatusEnum::randomValue(),
+            'user_id' => User::factory()->create()->id,
         ];
     }
 }
