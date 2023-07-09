@@ -20,9 +20,9 @@ return new class extends Migration
             $table->unsignedBigInteger('hourly_price');
             $table->tinyInteger('status')->default(0);
             $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('coach_info_id')->constrained('coach_infos');
 
 //            $table->foreignId('category_id')->constrained('')
-//            $table->foreignId('coach_info')
             $table->timestamps();
         });
     }
