@@ -23,7 +23,6 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('info_id')->constrained('coach_infos');
 
-//            $table->foreignId('category_id')->constrained('')
             $table->timestamps();
         });
     }

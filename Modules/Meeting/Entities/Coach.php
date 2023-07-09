@@ -43,7 +43,7 @@ class Coach extends Model
 
     public function category(): MorphMany
     {
-        return $this->morphMany(Category::class,'categories');
+        return $this->morphMany(Category::class,'categoryable');
     }
 
     public function coachInfo(): BelongsTo

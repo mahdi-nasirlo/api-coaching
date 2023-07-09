@@ -32,12 +32,23 @@ class CoachResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('avatar')
+                    ->circular()
+                    ->label('پروفایل'),
+
                 TextColumn::make('name')
                     ->label('نام'),
-                TextColumn::make('user.name'),
+
+                TextColumn::make('user.name')
+                    ->label('نام کاربری'),
+
+                TextColumn::make('category.name')
+                    ->label('حوزه فعالیت'),
+
                 TextColumn::make('hourly_price')
                     ->formatStateUsing(fn($state) => number_format($state) . ' تومان ')
                     ->label('هزینه هر ساعت مشاوره'),
+
                 BadgeColumn::make('status')
                     ->label('وضعیت')
                     ->enum(CoachStatusEnum::reverseCasesWithLang())
