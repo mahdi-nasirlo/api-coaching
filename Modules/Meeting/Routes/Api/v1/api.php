@@ -15,4 +15,4 @@ use Modules\Meeting\Http\Controllers\CoachController;
 |
 */
 
-Route::apiResource('coach', CoachController::class);
+Route::apiResource('/coach', CoachController::class);

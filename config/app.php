@@ -185,4 +185,7 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    'pagination_per_page' => [
+        'coach' => 15,
+    ],
 ];

@@ -33,5 +33,14 @@ class CoachFactory extends Factory
             'info_id' => CoachInfo::factory(),
         ];
     }
+
+    public function accepted(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'status' => CoachStatusEnum::ACCEPTED->value,
+            ];
+        });
+    }
 }
 
