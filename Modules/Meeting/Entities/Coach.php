@@ -21,7 +21,8 @@ use Modules\Meeting\Scopes\AcceptedCoachScope;
  * @property string $avatar
  * @property integer $hourly_price
  * @property CoachStatusEnum $status
-*/
+ * @method static join(string $string, string $string1, string $string2, string $string3)
+ */
 
 class Coach extends Model
 {
@@ -51,7 +52,7 @@ class Coach extends Model
 
     public function coachInfo(): BelongsTo
     {
-        return $this->belongsTo(CoachInfo::class);
+        return $this->belongsTo(CoachInfo::class,'info_id');
     }
 
     protected static function newFactory(): CoachFactory
