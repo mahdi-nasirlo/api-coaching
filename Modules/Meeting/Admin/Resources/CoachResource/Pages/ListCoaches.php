@@ -4,7 +4,6 @@ namespace Modules\Meeting\Admin\Resources\CoachResource\Pages;
 
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ListRecords;
-use Illuminate\Database\Eloquent\Builder;
 use Modules\Meeting\Admin\Resources\CoachResource;
 
 class ListCoaches extends ListRecords
@@ -16,10 +15,5 @@ class ListCoaches extends ListRecords
         return [
             Actions\CreateAction::make(),
         ];
-    }
-
-    protected function getTableQuery(): Builder
-    {
-        return parent::getTableQuery()->withoutGlobalScopes();
     }
 }

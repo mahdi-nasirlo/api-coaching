@@ -3,15 +3,15 @@
 namespace Modules\Meeting\Admin\Resources;
 
 use App\Models\Coach;
+use Exception;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
-use Modules\Food\Enums\FoodStatusEnum;
+use Illuminate\Database\Eloquent\Builder;
 use Modules\Meeting\Admin\Resources\CoachResource\Pages;
-use Modules\Meeting\Admin\Resources\CoachResource\RelationManagers;
 use Modules\Meeting\Enums\CoachStatusEnum;
 
 class CoachResource extends Resource
@@ -19,6 +19,13 @@ class CoachResource extends Resource
     protected static ?string $model = \Modules\Meeting\Entities\Coach::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
+
+    protected static ?string $slug = '/coach';
+
+    public static function getEloquentQuery() : Builder
+    {
+        return parent::getEloquentQuery()->withoutGlobalScopes();
+    }
 
     public static function form(Form $form): Form
     {
@@ -28,6 +35,9 @@ class CoachResource extends Resource
             ]);
     }
 
+    /**
+     * @throws Exception
+     */
     public static function table(Table $table): Table
     {
         return $table

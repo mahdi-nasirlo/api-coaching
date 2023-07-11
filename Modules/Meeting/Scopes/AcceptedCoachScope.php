@@ -11,6 +11,6 @@ class AcceptedCoachScope implements Scope
 {
     public function apply(Builder $builder, Model $model): void
     {
-        $builder->where('status', CoachStatusEnum::ACCEPTED->value);
+        $builder->whereIn('status', [CoachStatusEnum::ACCEPTED, CoachStatusEnum::ACTIVE]);
     }
 }
