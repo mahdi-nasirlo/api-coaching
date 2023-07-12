@@ -3,7 +3,8 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
+use Illuminate\Support\Facades\Lang;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -23,8 +24,25 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (NotFoundHttpException $e, $request) {
+            if ($request->wantsJson()) {
+
+                $model = $this->extractModelNameFromException($e->getMessage());
+
+                $translatedModel = Lang::get("models.$model");
+
+                return response()->json([
+                    'message' => $translatedModel . ' مورد نظر یافت نشد',
+                ]);
+            }
         });
+    }
+
+    private function extractModelNameFromException(string $exceptionMessage): string
+    {
+        $matches = [];
+        preg_match('/No query results for model \[(.*?)\]/', $exceptionMessage, $matches);
+
+        return $matches[1] ?? 'Unknown Model';
     }
 }
