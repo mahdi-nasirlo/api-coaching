@@ -2,15 +2,19 @@
 
 namespace Modules\Meeting\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 use Modules\Meeting\Entities\Coach;
+use Modules\Meeting\Entities\CoachInfo;
+use Modules\Meeting\Http\Requests\CoachRequest;
 use Modules\Meeting\Transformers\Coach\CoachListResource;
 use Modules\Meeting\Transformers\Coach\CoachResource;
 
 class CoachController extends Controller
 {
+    
 
     public function index(): AnonymousResourceCollection
     {
@@ -25,9 +29,17 @@ class CoachController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(CoachRequest $request): JsonResponse
     {
-        //
+        $data = $request->toArray();
+
+        $coachInfo = CoachInfo::create($data);
+        $data['info_id'] = $coachInfo->id;
+        $data['user_id'] = auth()->id();
+
+        $coach =  Coach::create($data);
+
+        return response()->json($coach->toArray());
     }
 
     public function show($id): CoachResource

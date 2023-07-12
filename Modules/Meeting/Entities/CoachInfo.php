@@ -12,6 +12,7 @@ use Modules\Meeting\Database\factories\CoachInfoFactory;
  * @property string $resume
  * @property string $job_experience
  * @property string $education_recorde
+ * @method static create()
  */
 
 class CoachInfo extends Model

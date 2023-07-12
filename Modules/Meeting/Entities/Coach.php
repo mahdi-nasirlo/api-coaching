@@ -22,6 +22,7 @@ use Modules\Meeting\Scopes\AcceptedCoachScope;
  * @property integer $hourly_price
  * @property CoachStatusEnum $status
  * @method static join(string $string, string $string1, string $string2, string $string3)
+ * @method static create()
  */
 
 class Coach extends Model
