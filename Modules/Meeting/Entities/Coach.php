@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Modules\Category\Entities\Category;
 use Modules\Meeting\Database\factories\CoachFactory;
@@ -54,6 +55,11 @@ class Coach extends Model
     public function coachInfo(): BelongsTo
     {
         return $this->belongsTo(CoachInfo::class,'info_id');
+    }
+
+    public function meeting(): HasMany
+    {
+        return $this->hasMany(Meeting::class);
     }
 
     protected static function newFactory(): CoachFactory
