@@ -2,8 +2,9 @@
 
 namespace Modules\Meeting\Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use Modules\Meeting\Entities\Coach;
+use Modules\Meeting\Entities\Meeting;
 
 class MeetingDatabaseSeeder extends Seeder
 {
@@ -15,9 +16,15 @@ class MeetingDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Coach::factory()
-            ->count(20)
-            ->create();
+        User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'admin@local.com',
+        ]);
+        
+       Meeting::factory()
+           ->count(500)
+           ->create();
+
 
         // $this->call("OthersTableSeeder");
     }

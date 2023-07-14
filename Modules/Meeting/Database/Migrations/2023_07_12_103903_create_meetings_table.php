@@ -16,14 +16,11 @@ return new class extends Migration
         Schema::create('meetings', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->longText('body')->nullable();
-            $table->string('category')->nullable();
-            $table->boolean('isAllDay')->default(false);
-            $table->date('end');
-            $table->time('endTime')->nullable();
-            $table->date('start');
-            $table->time('startTime')->nullable();
+            $table->date('date');
+            $table->time('start_time');
+            $table->time('end_time');
             $table->foreignId('coach_id')->constrained('coaches');
-
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }
