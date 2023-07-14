@@ -3,11 +3,16 @@
 namespace Modules\Meeting\Admin\Resources;
 
 use Ariaieboy\FilamentJalaliDatetime\JalaliDateTimeColumn;
+use Ariaieboy\FilamentJalaliDatetimepicker\Forms\Components\JalaliDatePicker;
 use Auth;
 use Carbon\Carbon;
+use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TimePicker;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Modules\Meeting\Admin\Resources\MeetingResource\Pages;
@@ -26,7 +31,27 @@ class MeetingResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Card::make()
+                    ->columns(2)
+                    ->schema([
+                        Select::make('coach_id')
+                            ->label('مربی')
+                            ->default('تایید نشده')
+                            ->relationship('coach', 'name'),
+                        JalaliDatePicker::make('date')
+                            ->label('تاریخ')
+                            ->format('Y-m-D'),
+                        TimePicker::make('start_time')
+                            ->label('زمان شروع'),
+                        TimePicker::make('end_time')
+                            ->label('زمان پایان'),
+                        Select::make('status')
+                            ->label('وضعیت')
+                            ->options([
+                                '1' => 'رزور نشده',
+                                '0' => 'رزرو شده',
+                            ]),
+                    ])
             ]);
     }
 
@@ -57,14 +82,9 @@ class MeetingResource extends Resource
             ])
             ->defaultSort('date')
             ->bulkActions([])
-            ->actions([]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
+            ->actions([
+                ViewAction::make()
+            ]);
     }
 
     public static function getPages(): array
@@ -73,6 +93,7 @@ class MeetingResource extends Resource
             'index' => Pages\ListMeetings::route('/'),
             'create' => Pages\CreateMeeting::route('/create'),
             'edit' => Pages\EditMeeting::route('/{record}/edit'),
+            'view' => Pages\ViewMeeting::route('/{record}/view'),
         ];
     }
 }
