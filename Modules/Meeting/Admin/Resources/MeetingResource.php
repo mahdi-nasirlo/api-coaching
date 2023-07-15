@@ -60,6 +60,7 @@ class MeetingResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('coach.name')
+                    ->url(fn(Meeting $record): string => CoachResource::getUrl('view', 1))
                     ->getStateUsing(fn(Meeting $record) => $record->coach->name ?? 'تایید نشده')
                     ->color('primary')
                     ->label('مربی'),
