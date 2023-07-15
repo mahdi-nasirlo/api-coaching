@@ -2,8 +2,12 @@
 
 namespace Modules\Meeting\Admin\Resources;
 
-use App\Models\Coach;
 use Exception;
+use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -12,6 +16,7 @@ use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Modules\Meeting\Admin\Resources\CoachResource\Pages;
+use Modules\Meeting\Entities\Coach;
 use Modules\Meeting\Enums\CoachStatusEnum;
 
 class CoachResource extends Resource
@@ -24,14 +29,48 @@ class CoachResource extends Resource
 
     public static function getEloquentQuery() : Builder
     {
-        return parent::getEloquentQuery()->withoutGlobalScopes();
+        return parent::getEloquentQuery();
     }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                Card::make()
+                    ->columns(2)
+                    ->schema([
+                        TextInput::make('name')
+                            ->disabled()
+                            ->label('نام و نام خانوادگی'),
+                        TextInput::make('user_name')
+                            ->disabled()
+                            ->label('نام کاربری'),
+                        TextInput::make('hourly_price')
+                            ->disabled()
+                            ->label('هزینه هر ساعت مشاوره'),
+                        Select::make('status')
+                            ->hint("**قابل ویرایش**")
+                            ->hintColor('primary')
+                            ->hintIcon('heroicon-s-pencil')
+                            ->label('وضعیت')
+                            ->options(CoachStatusEnum::reverseCases())
+                    ]),
+                Section::make('اطلاعات تکمیلی')
+                    ->label('اطلاعات تکمیلی')
+                    ->schema([
+                        Textarea::make('about_me')
+                            ->disabled()
+                            ->label('درباره من'),
+                        Textarea::make('resume')
+                            ->disabled()
+                            ->label('رزومه'),
+                        Textarea::make('job_experience')
+                            ->disabled()
+                            ->label('سوابق شغلی'),
+                        Textarea::make('education_recorde')
+                            ->disabled()
+                            ->label('سوابق تحصیلی'),
+                    ])
             ]);
     }
 
@@ -49,7 +88,8 @@ class CoachResource extends Resource
                 TextColumn::make('name')
                     ->label('نام'),
 
-                TextColumn::make('user.name')
+                TextColumn::make('user_name')
+                    ->wrap()
                     ->label('نام کاربری'),
 
                 TextColumn::make('category.name')
@@ -70,25 +110,23 @@ class CoachResource extends Resource
                             CoachStatusEnum::REJECTED => 'danger',
                             default => 'primary',
                         };
-                    })
+                    }),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('meet')
+                    ->color('secondary')
+                    ->label('جلسات')
+                    ->url(fn(Coach $record): string => self::getUrl('meeting', $record)),
                 Tables\Actions\ViewAction::make()
+                    ->color('primary')
+                    ->label('تغییر وضعیت')
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
     }
 
     public static function getPages(): array
@@ -97,7 +135,8 @@ class CoachResource extends Resource
             'index' => Pages\ListCoaches::route('/'),
             'create' => Pages\CreateCoach::route('/create'),
             'edit' => Pages\EditCoach::route('/{record}/edit'),
-            'view' => Pages\ViewCoach::route('/{record}/view'),
+            'view' => Pages\ViewCoach::route('/{record}'),
+            'meeting' => Pages\MeetingCoach::route('/{record}/meet')
         ];
     }
 }

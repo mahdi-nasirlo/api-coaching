@@ -2,9 +2,8 @@
 
 namespace Modules\Meeting\Admin\Resources\CoachResource\Pages;
 
-use Modules\Meeting\Admin\Resources\CoachResource;
-use Filament\Pages\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Modules\Meeting\Admin\Resources\CoachResource;
 
 class EditCoach extends EditRecord
 {
@@ -13,7 +12,7 @@ class EditCoach extends EditRecord
     protected function getActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+
         ];
     }
 }

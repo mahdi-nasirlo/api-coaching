@@ -35,6 +35,7 @@ class MeetingResource extends Resource
                     ->columns(2)
                     ->schema([
                         Select::make('coach_id')
+                            ->searchable()
                             ->label('مربی')
                             ->default('تایید نشده')
                             ->relationship('coach', 'name'),
@@ -60,7 +61,7 @@ class MeetingResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('coach.name')
-                    ->url(fn(Meeting $record): string => CoachResource::getUrl('view', 1))
+                    ->url(fn(Meeting $record): string => $record->coach?->id ? CoachResource::getUrl('view', $record->coach?->id) : "")
                     ->getStateUsing(fn(Meeting $record) => $record->coach->name ?? 'تایید نشده')
                     ->color('primary')
                     ->label('مربی'),

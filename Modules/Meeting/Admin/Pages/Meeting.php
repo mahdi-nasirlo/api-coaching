@@ -3,6 +3,7 @@
 namespace Modules\Meeting\Admin\Pages;
 
 use Filament\Pages\Page;
+use Modules\Meeting\Admin\Resources\CoachResource;
 
 class Meeting extends Page
 {
@@ -13,13 +14,12 @@ class Meeting extends Page
 
     public function mount()
     {
-        $this->meeting = \Modules\Meeting\Entities\Meeting::all()->take(20)->map(function ($meeting) {
+        $this->meeting = \Modules\Meeting\Entities\Meeting::all()->map(function ($meeting) {
             return [
-                'title' => $meeting->coach->name,
-                'start' => $meeting->date . ' ' .$meeting->start_time,
-                'end' => $meeting->date . ' ' . $meeting->end_time ,
-//                'startTime' => $meeting->start_time,
-//                'endTime' => $meeting->end_time,
+                'title' => $meeting->coach->name ?? 'تایید نشده',
+                'start' => $meeting->date . ' ' . $meeting->start_time,
+                'end' => $meeting->date . ' ' . $meeting->end_time,
+                'url' => $meeting->coach?->id ? CoachResource::getUrl('view', $meeting->coach) : '',
             ];
         })->toArray();
     }

@@ -3,19 +3,25 @@
 
     <script>
 
-        document.addEventListener('DOMContentLoaded', function()
-        {
+        document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'timeGridFourDay',
-                views: {
-                    timeGridFourDay: {
-                        type: 'timeGrid',
-                        duration: { days: 4 }
-                    }
-                },
+                // initialView: 'timeGridFourDay',
+                // views: {
+                //     timeGridFourDay: {
+                //         type: 'timeGrid',
+                //         duration: { days: 4 }
+                //     }
+                // },
                 locale: 'fa',                // initialView: 'timeGridWeek',
                 // initialView: 'dayGridMonth',
+                // initialView: 'listWeek',
+                initialView: 'dayGridWeek',
+                headerToolbar: {
+                    left: 'prev,next',
+                    center: 'title',
+                    right: 'dayGridWeek,dayGridDay' // user can switch between the two
+                },
                 // events: [
                 //     { // this object will be "parsed" into an Event Object
                 //         title: 'The Title', // a property!
