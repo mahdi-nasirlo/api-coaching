@@ -18,7 +18,7 @@ class CoachResource extends JsonResource
         return [
             'name' => $this->name,
             'username' => $this->user_name,
-            'avatar' => asset('storage/'.$this->avatar),
+            'avatar' => asset('storage/avatars/' . $this->avatar),
             'status' => $this->status,
             'hourly_price' => $this->hourly_price,
             'hourly_price_formatted' => number_format($this->hourly_price),

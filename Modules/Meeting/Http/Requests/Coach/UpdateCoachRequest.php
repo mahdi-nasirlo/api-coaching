@@ -3,17 +3,16 @@
 namespace Modules\Meeting\Http\Requests\Coach;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 /**
  * @property mixed $user_name
+ * @property mixed $avatar
  */
 class UpdateCoachRequest extends FormRequest
 {
     public function rules(): array
     {
-        Log::info($this->user_name);
         return [
             'name' => ['required', 'string', 'max:255'],
             'avatar' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:2048'],

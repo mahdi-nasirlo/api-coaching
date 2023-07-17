@@ -3,6 +3,7 @@
 namespace Modules\Meeting\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
@@ -29,6 +30,7 @@ class CoachController extends Controller
         }
 
         $data = $request->validated();
+        $data['avatar'] = $this->uploadAvatar($request);
 
         $coachInfo = CoachInfo::create($data);
         $data['info_id'] = $coachInfo->id;
@@ -63,9 +65,20 @@ class CoachController extends Controller
 
         $data = $request->validated();
 
+        $data['coach']['avatar'] = $this->uploadAvatar($request);
+
         $coach->update($data['coach']);
         $coach->coachInfo()->update($data['coach_info']);
 
         return new CoachResource($coach);
+    }
+
+    protected function uploadAvatar(Request $request): string
+    {
+        $file = $request->file('avatar');
+        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+        $filePath = $file->storeAs('public/avatars', $filename);
+
+        return $filename;
     }
 }
