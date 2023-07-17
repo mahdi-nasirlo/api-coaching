@@ -3,19 +3,18 @@
 namespace Modules\Meeting\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Response;
 use Modules\Meeting\Entities\Coach;
 use Modules\Meeting\Entities\CoachInfo;
-use Modules\Meeting\Http\Requests\CoachRequest;
+use Modules\Meeting\Http\Requests\Coach\CreateCoachRequest;
+use Modules\Meeting\Http\Requests\Coach\UpdateCoachRequest;
 use Modules\Meeting\Transformers\Coach\CoachListResource;
 use Modules\Meeting\Transformers\Coach\CoachResource;
 
 class CoachController extends Controller
 {
-    
-
     public function index(): AnonymousResourceCollection
     {
         $coaches = Coach::paginate();
@@ -23,53 +22,50 @@ class CoachController extends Controller
         return CoachListResource::collection($coaches);
     }
 
-    public function create()
+    public function store(CreateCoachRequest $request): CoachResource|JsonResponse
     {
-        return view('meeting::create');
-    }
+        if (auth()->user()->coach) {
+            return Response::json(['message' => 'You are a coach right now and you cannot become a coach again.'], 403);
+        }
 
-
-    public function store(CoachRequest $request): JsonResponse
-    {
-        $data = $request->toArray();
+        $data = $request->validated();
 
         $coachInfo = CoachInfo::create($data);
         $data['info_id'] = $coachInfo->id;
         $data['user_id'] = auth()->id();
 
-        $coach =  Coach::create($data);
+        $coach = Coach::create($data);
 
-        return response()->json($coach->toArray());
+        return new CoachResource($coach);
     }
 
-    public function show($id): CoachResource
+    public function show($user_name): CoachResource
     {
         $coach = Coach::join('coach_infos', 'coaches.info_id', '=', 'coach_infos.id')
-                ->select
-                (
-                    'coaches.id','coaches.name', 'coaches.avatar',
-                    'coaches.user_name', 'coaches.hourly_price', 'coaches.info_id',
-                    'coach_infos.about_me', 'coach_infos.resume', 'coach_infos.job_experience', 'coach_infos.education_record'
-                )
-            ->where('coaches.id', $id)
+            ->select
+            (
+                'coaches.id', 'coaches.name', 'coaches.avatar',
+                'coaches.user_name', 'coaches.hourly_price', 'coaches.info_id',
+                'coach_infos.about_me', 'coach_infos.resume', 'coach_infos.job_experience', 'coach_infos.education_record'
+            )
+            ->where('coaches.user_name', $user_name)
             ->whereNotNull('coach_infos.id')
             ->firstOrFail();
 
         return new CoachResource($coach);
     }
 
-    public function edit($id)
+    public function update(UpdateCoachRequest $request, Coach $coach): CoachResource|JsonResponse
     {
-        return view('meeting::edit');
-    }
+        if (auth()->id() !== $coach->user_id) {
+            return Response::json(['message' => "You Don't access to update this coach information"], 403);
+        }
 
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        $data = $request->validated();
 
-    public function destroy($id)
-    {
-        //
+        $coach->update($data['coach']);
+        $coach->coachInfo()->update($data['coach_info']);
+
+        return new CoachResource($coach);
     }
 }

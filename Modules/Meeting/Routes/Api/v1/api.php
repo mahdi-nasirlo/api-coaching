@@ -17,12 +17,12 @@ use Modules\Meeting\Http\Controllers\CoachController;
 Route::prefix('coach')->name('coach.')->group(function () {
 
     Route::get('/', [CoachController::class, 'index'])->name('index');
-    Route::get('/{coach}', [CoachController::class, 'show'])->name('show');
+    Route::get('/{user_name}', [CoachController::class, 'show'])->name('show');
 
-    Route::middleware('auth:sanctum')->group(function (){
+    Route::middleware('auth:sanctum')->group(function () {
 
-        Route::put('/{coach}', [CoachController::class, 'update'])->name('update');
-        Route::post('/', [CoachController::class, 'create'])->name('create');
+        Route::post('/{coach:user_name}', [CoachController::class, 'update'])->name('update');
+        Route::post('/', [CoachController::class, 'store'])->name('store');
 
     });
 
