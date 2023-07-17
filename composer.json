@@ -10,10 +10,13 @@
         "ariaieboy/filament-jalali-datetime": "^1.1",
         "ariaieboy/filament-jalali-datetimepicker": "^1.2",
         "filament/filament": "^2.17",
+        "filament/spatie-laravel-tags-plugin": "^2.17",
         "guzzlehttp/guzzle": "^7.2",
+        "kalnoy/nestedset": "^6.0",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
+        "mohamedsabil83/filament-forms-tinyeditor": "^1.7",
         "nwidart/laravel-modules": "^10.0",
         "realmrhex/filament-modular": "^0.2.0"
     },
