@@ -6,7 +6,7 @@ use Filament\Pages\Page;
 use Modules\Meeting\Admin\Resources\CoachResource;
 use Morilog\Jalali\Jalalian;
 
-class Meeting extends Page
+class MeetingPage extends Page
 {
     public $meeting = [];
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
