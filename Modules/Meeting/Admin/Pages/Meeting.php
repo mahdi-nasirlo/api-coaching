@@ -4,13 +4,25 @@ namespace Modules\Meeting\Admin\Pages;
 
 use Filament\Pages\Page;
 use Modules\Meeting\Admin\Resources\CoachResource;
+use Morilog\Jalali\Jalalian;
 
 class Meeting extends Page
 {
     public $meeting = [];
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationIcon = 'heroicon-o-calendar';
 
     protected static string $view = 'meeting::admin.pages.meeting';
+
+    protected static ?string $slug = "getAll/meeting";
+
+    protected static ?string $title = 'لیست کل جلسات';
+
+    protected static ?string $navigationGroup = 'کوچینگ';
+
+    public static function getNavigationLabel(): string
+    {
+        return Jalalian::now()->format("%A, d M");
+    }
 
     public function mount()
     {

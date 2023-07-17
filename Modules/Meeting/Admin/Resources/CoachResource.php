@@ -23,11 +23,28 @@ class CoachResource extends Resource
 {
     protected static ?string $model = \Modules\Meeting\Entities\Coach::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
 
     protected static ?string $slug = '/coach';
 
-    public static function getEloquentQuery() : Builder
+    protected static ?string $recordTitleAttribute = 'date';
+
+    protected static ?string $navigationGroup = 'کوچینگ';
+
+
+//    protected static ?int $navigationSort = 6;
+
+    public static function getModelLabel(): string
+    {
+        return "مربی";
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return "مربی ها";
+    }
+
+    public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery();
     }

@@ -25,7 +25,24 @@ class MeetingResource extends Resource
 
     protected static ?string $slug = 'meetings';
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-chat';
+
+    protected static ?string $recordTitleAttribute = 'date';
+
+    protected static ?string $navigationGroup = 'کوچینگ';
+
+
+//    protected static ?int $navigationSort = 6;
+
+    public static function getModelLabel(): string
+    {
+        return "جلسه";
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return "جلسات";
+    }
 
     public static function form(Form $form): Form
     {
