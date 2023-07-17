@@ -26,7 +26,7 @@ class CoachFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'avatar' => '/default-avatar.jpg',
+            'avatar' => '/default.jpg',
             'hourly_price' => rand(10, 200) * 1000,
             'status' => CoachStatusEnum::randomValue(),
             'user_id' => User::factory()->create(),

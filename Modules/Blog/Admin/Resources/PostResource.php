@@ -12,7 +12,7 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Modules\Blog\Admin\Resources\PostResource\Pages;
-use Modules\Blog\Entities\Category;
+use Modules\Blog\Entities\BlogCategory;
 use Modules\Blog\Entities\Post;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 use Morilog\Jalali\Jalalian;
@@ -135,7 +135,7 @@ class PostResource extends Resource
                             ->preload()
                             ->label("دسته بندی")
                             ->options(function (callable $get) {
-                                return Category::all()->pluck("name", "id")->toArray();
+                                return BlogCategory::all()->pluck("name", "id")->toArray();
                             })
                             ->relationship("category", "name")
                             ->createOptionForm([
@@ -145,16 +145,16 @@ class PostResource extends Resource
                                             ->label('عنوان')
                                             ->required()
                                             ->reactive()
-                                            ->afterStateUpdated(fn($state, callable $set) => $set('slug', SlugService::createSlug(Category::class, 'slug', $state == null ? "" : $state))),
+                                            ->afterStateUpdated(fn($state, callable $set) => $set('slug', SlugService::createSlug(BlogCategory::class, 'slug', $state == null ? "" : $state))),
                                         Forms\Components\TextInput::make('slug')
                                             ->label('نامک')
                                             ->disabled()
                                             ->required()
-                                            ->unique(Category::class, 'slug', fn($record) => $record),
+                                            ->unique(BlogCategory::class, 'slug', fn($record) => $record),
                                     ]),
                                 Forms\Components\Select::make('parent_id')
                                     ->label('دسته بندی پدر')
-                                    ->relationship('parent', 'name', fn(Builder $query, ?Category $record) => $query->whereNot('id', $record ? $record->id : null)),
+                                    ->relationship('parent', 'name', fn(Builder $query, ?BlogCategory $record) => $query->whereNot('id', $record ? $record->id : null)),
                                 Forms\Components\Toggle::make('is_visible')
                                     ->label('قابل نمایش برای کاربران.')
                                     ->onIcon('heroicon-s-eye')

@@ -20,10 +20,10 @@ class MeetingDatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'admin@local.com',
         ]);
-        
-       Meeting::factory()
-           ->count(500)
-           ->create();
+
+        Meeting::factory()
+            ->count(500)
+            ->create();
 
 
         // $this->call("OthersTableSeeder");
