@@ -4,12 +4,15 @@ namespace Modules\Blog\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Kalnoy\Nestedset\NodeTrait;
 use Modules\Blog\Database\factories\BlogCategoryFactory;
+
+//use Kalnoy\Nestedset\NodeTrait;
 
 class BlogCategory extends Model
 {
-    use HasFactory, NodeTrait;
+    use HasFactory;
+
+//        , NodeTrait;
 
     protected $guarded = ['created_at', 'updated_at'];
 
