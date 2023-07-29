@@ -15,6 +15,7 @@
         "kalnoy/nestedset": "^6.0",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.2",
+        "laravel/telescope": "^4.15",
         "laravel/tinker": "^2.8",
         "mohamedsabil83/filament-forms-tinyeditor": "^1.7",
         "nwidart/laravel-modules": "^10.0",
