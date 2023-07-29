@@ -1,5 +1,9 @@
 <?php
 
 return [
-    'name' => 'Meeting'
+    'name' => 'Meeting',
+
+    'pagination_per_page' => [
+        'coach' => 15,
+    ]
 ];

@@ -18,7 +18,7 @@ class CoachController extends Controller
 {
     public function index(): AnonymousResourceCollection
     {
-        $coaches = Coach::paginate();
+        $coaches = Coach::acceptedStatus()->paginate();
 
         return CoachListResource::collection($coaches);
     }
@@ -26,7 +26,10 @@ class CoachController extends Controller
     public function store(CreateCoachRequest $request): CoachResource|JsonResponse
     {
         if (auth()->user()->coach) {
-            return Response::json(['message' => 'You are a coach right now and you cannot become a coach again.'], 403);
+            return Response::json([
+                'status' => false,
+                'message' => 'You are a coach right now and you cannot become a coach again.'
+            ], 403);
         }
 
         $data = $request->validated();
@@ -39,6 +42,15 @@ class CoachController extends Controller
         $coach = Coach::create($data);
 
         return new CoachResource($coach);
+    }
+
+    protected function uploadAvatar(Request $request): string
+    {
+        $file = $request->file('avatar');
+        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+        $filePath = $file->storeAs('public/avatars', $filename);
+
+        return $filename;
     }
 
     public function show($user_name): CoachResource
@@ -71,14 +83,5 @@ class CoachController extends Controller
         $coach->coachInfo()->update($data['coach_info']);
 
         return new CoachResource($coach);
-    }
-
-    protected function uploadAvatar(Request $request): string
-    {
-        $file = $request->file('avatar');
-        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-        $filePath = $file->storeAs('public/avatars', $filename);
-
-        return $filename;
     }
 }
