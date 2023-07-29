@@ -12,7 +12,6 @@ use Modules\Category\Entities\Category;
 use Modules\Meeting\Database\factories\CoachFactory;
 use Modules\Meeting\Enums\CoachStatusEnum;
 use Modules\Meeting\Observers\CoachObserver;
-use Modules\Meeting\Scopes\AcceptedCoachScope;
 
 /**
  * @property int $id
@@ -24,8 +23,8 @@ use Modules\Meeting\Scopes\AcceptedCoachScope;
  * @property CoachStatusEnum $status
  * @method static join(string $string, string $string1, string $string2, string $string3)
  * @method static create()
+ * @method acceptedStatus()
  */
-
 class Coach extends Model
 {
     use HasFactory;
@@ -38,8 +37,13 @@ class Coach extends Model
 
     protected static function booted(): void
     {
-        static::addGlobalScope(new AcceptedCoachScope());
+//        static::addGlobalScope(new AcceptedCoachScope());
         self::observe(CoachObserver::class);
+    }
+
+    protected static function newFactory(): CoachFactory
+    {
+        return CoachFactory::new();
     }
 
     public function user(): BelongsTo
@@ -49,12 +53,12 @@ class Coach extends Model
 
     public function category(): MorphMany
     {
-        return $this->morphMany(Category::class,'categoryable');
+        return $this->morphMany(Category::class, 'categoryable');
     }
 
     public function coachInfo(): BelongsTo
     {
-        return $this->belongsTo(CoachInfo::class,'info_id');
+        return $this->belongsTo(CoachInfo::class, 'info_id');
     }
 
     public function meeting(): HasMany
@@ -62,8 +66,8 @@ class Coach extends Model
         return $this->hasMany(Meeting::class);
     }
 
-    protected static function newFactory(): CoachFactory
+    public function ScopeAcceptedStatus($query)
     {
-        return CoachFactory::new();
+        return $query->whereIn('status', [CoachStatusEnum::ACCEPTED, CoachStatusEnum::ACTIVE]);
     }
 }
