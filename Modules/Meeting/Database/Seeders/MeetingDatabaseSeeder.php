@@ -4,6 +4,7 @@ namespace Modules\Meeting\Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Modules\Meeting\Entities\Meeting;
 
 class MeetingDatabaseSeeder extends Seeder
@@ -16,13 +17,16 @@ class MeetingDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'admin@local.com',
-        ]);
+        User::query()->updateOrCreate(
+            ['email' => 'admin@local.com'],
+            [
+                'name' => 'test user',
+                'password' => Hash::make('password'),
+            ]
+        );
 
         Meeting::factory()
-            ->count(500)
+            ->count(100)
             ->create();
 
 
