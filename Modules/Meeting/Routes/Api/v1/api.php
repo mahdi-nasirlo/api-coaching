@@ -21,7 +21,7 @@ Route::prefix('coach')->name('coach.')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
 
-        Route::post('/{coach:user_name}', [CoachController::class, 'update'])->name('update');
+        Route::post('/{coach:uuid}', [CoachController::class, 'update'])->name('update');
         Route::post('/', [CoachController::class, 'store'])->name('store');
 
     });

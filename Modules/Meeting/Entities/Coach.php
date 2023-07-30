@@ -20,6 +20,7 @@ use Modules\Meeting\Observers\CoachObserver;
  * @property string $user_name
  * @property string $avatar
  * @property integer $hourly_price
+ * @property string $uuid
  * @property CoachStatusEnum $status
  * @method static join(string $string, string $string1, string $string2, string $string3)
  * @method static create()

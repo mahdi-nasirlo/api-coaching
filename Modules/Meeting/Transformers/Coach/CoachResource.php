@@ -7,10 +7,9 @@ use Modules\Meeting\Entities\Coach;
 use Modules\Meeting\Entities\CoachInfo;
 
 /**
-* @mixin Coach
-* @mixin CoachInfo
-*/
-
+ * @mixin Coach
+ * @mixin CoachInfo
+ */
 class CoachResource extends JsonResource
 {
     public function toArray($request): array
@@ -18,6 +17,7 @@ class CoachResource extends JsonResource
         return [
             'name' => $this->name,
             'username' => $this->user_name,
+            'uuid' => $this->uuid,
             'avatar' => asset('storage/avatars/' . $this->avatar),
             'status' => $this->status,
             'hourly_price' => $this->hourly_price,

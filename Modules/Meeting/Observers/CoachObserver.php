@@ -5,6 +5,7 @@ namespace Modules\Meeting\Observers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Modules\Meeting\Entities\Coach;
+use Webpatser\Uuid\Uuid;
 
 class CoachObserver
 {
@@ -17,5 +18,7 @@ class CoachObserver
             $coach->user_name = Auth::user()->name;
         else
             $coach->user_name = Str::uuid()->toString();
+
+        $coach->uuid = Uuid::generate(4);
     }
 }
