@@ -3,6 +3,7 @@
 namespace Modules\Meeting\Entities;
 
 use App\Models\User;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,10 +31,10 @@ class Coach extends Model
 {
     use HasFactory;
 
+    use Sluggable;
+
     protected $guarded = ['created_at', 'updated_at'];
-
     protected $casts = ['status' => CoachStatusEnum::class];
-
     protected $observables = [];
 
     protected static function booted(): void
@@ -45,6 +46,15 @@ class Coach extends Model
     protected static function newFactory(): CoachFactory
     {
         return CoachFactory::new();
+    }
+
+    public function sluggable(): array
+    {
+        return [
+            'user_name' => [
+                'source' => 'name'
+            ]
+        ];
     }
 
     public function user(): BelongsTo

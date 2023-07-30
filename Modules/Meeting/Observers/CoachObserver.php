@@ -2,8 +2,7 @@
 
 namespace Modules\Meeting\Observers;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 use Modules\Meeting\Entities\Coach;
 use Webpatser\Uuid\Uuid;
 
@@ -14,10 +13,8 @@ class CoachObserver
      */
     public function creating(Coach $coach): void
     {
-        if (!$coach->user_name && !$coach->user()->exists())
-            $coach->user_name = Auth::user()->name;
-        else
-            $coach->user_name = Str::uuid()->toString();
+
+        $coach->user_name = SlugService::createSlug(Coach::class, 'user_name', $coach->user_name ?: $coach->name);
 
         $coach->uuid = Uuid::generate(4);
     }
