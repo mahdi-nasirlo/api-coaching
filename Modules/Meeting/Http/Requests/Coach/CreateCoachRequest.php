@@ -15,7 +15,7 @@ class CreateCoachRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'avatar' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:2048'],
-            'user_name' => ['nullable', Rule::unique('coaches', 'user_name'), 'string', 'max:255'],
+            'user_name' => ['nullable', 'alpha_dash', Rule::unique('coaches', 'user_name'), 'string', 'max:255'],
             'hourly_price' => ['required', 'numeric', 'min:0'],
             'about_me' => ['required', 'string', 'max:1024'],
             'resume' => ['required', 'string', 'max:1024'],
