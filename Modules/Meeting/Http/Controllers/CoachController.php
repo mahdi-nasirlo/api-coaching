@@ -20,8 +20,10 @@ class CoachController extends Controller
     public function index(): AnonymousResourceCollection
     {
         $coaches = Cache::remember('getAllCoach', 60 * 60, function () {
-            return Coach::acceptedStatus()->paginate();
+            return Coach::with('categories')->acceptedStatus()->paginate();
         });
+
+        $coaches = Coach::with('categories')->acceptedStatus()->paginate();
 
         return CoachListResource::collection($coaches);
     }
@@ -58,7 +60,7 @@ class CoachController extends Controller
 
     public function show($uuid): CoachResource
     {
-        $coach = Cache::remember('getCoach_' . $uuid, 60 * 60 * 5, fn() => Coach::join('coach_infos', 'coaches.info_id', '=', 'coach_infos.id')
+        $coach = Cache::remember('getCoach_' . $uuid, 60 * 60 * 5, fn() => Coach::with('categories')->join('coach_infos', 'coaches.info_id', '=', 'coach_infos.id')
             ->select
             (
                 'coaches.id', 'coaches.name', 'coaches.avatar',

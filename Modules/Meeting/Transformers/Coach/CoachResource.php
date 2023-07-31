@@ -18,6 +18,7 @@ class CoachResource extends JsonResource
             'name' => $this->name,
             'username' => $this->user_name,
             'uuid' => $this->uuid,
+            'categories' => CoachCategoryResource::collection($this->whenLoaded('categories')),
             'avatar' => asset('storage/avatars/' . $this->avatar),
             'status' => $this->status,
             'hourly_price' => $this->hourly_price,

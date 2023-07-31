@@ -19,6 +19,7 @@ class CoachListResource extends JsonResource
             'avatar' => asset('storage/' . $this->avatar),
             'hourly_price' => $this->hourly_price,
             'hourly_price_formatted' => number_format($this->hourly_price),
+            'categories' => CoachCategoryResource::collection($this->whenLoaded('categories')),
         ];
     }
 }
