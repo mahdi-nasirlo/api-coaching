@@ -19,7 +19,7 @@ class CoachController extends Controller
 {
     public function index(): AnonymousResourceCollection
     {
-        $coaches = Cache::remember('getAllCoach', 60 * 60 * 24, function () {
+        $coaches = Cache::remember('getAllCoach', 60 * 60, function () {
             return Coach::acceptedStatus()->paginate();
         });
 
@@ -56,16 +56,16 @@ class CoachController extends Controller
         return $filename;
     }
 
-    public function show($user_name): CoachResource
+    public function show($uuid): CoachResource
     {
-        $coach = Cache::remember('getCoach_' . $user_name, 60 * 60 * 5, fn() => Coach::join('coach_infos', 'coaches.info_id', '=', 'coach_infos.id')
+        $coach = Cache::remember('getCoach_' . $uuid, 60 * 60 * 5, fn() => Coach::join('coach_infos', 'coaches.info_id', '=', 'coach_infos.id')
             ->select
             (
                 'coaches.id', 'coaches.name', 'coaches.avatar',
                 'coaches.user_name', 'coaches.hourly_price', 'coaches.info_id', 'coaches.uuid',
                 'coach_infos.about_me', 'coach_infos.resume', 'coach_infos.job_experience', 'coach_infos.education_record'
             )
-            ->where('coaches.user_name', $user_name)
+            ->where('coaches.uuid', $uuid)
             ->whereNotNull('coach_infos.id')
             ->firstOrFail()
         );

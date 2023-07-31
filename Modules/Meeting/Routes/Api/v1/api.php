@@ -17,7 +17,7 @@ use Modules\Meeting\Http\Controllers\CoachController;
 Route::prefix('coach')->name('coach.')->group(function () {
 
     Route::get('/', [CoachController::class, 'index'])->name('index');
-    Route::get('/{user_name}', [CoachController::class, 'show'])->name('show');
+    Route::get('/{uuid}', [CoachController::class, 'show'])->name('show');
 
     Route::middleware('auth:sanctum')->group(function () {
 
