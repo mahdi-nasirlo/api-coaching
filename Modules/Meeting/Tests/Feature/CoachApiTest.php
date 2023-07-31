@@ -2,6 +2,7 @@
 
 use Illuminate\Http\UploadedFile;
 use Modules\Meeting\Entities\Coach;
+use Modules\Meeting\Entities\CoachCategory;
 use Modules\Meeting\Enums\CoachStatusEnum;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
@@ -31,8 +32,11 @@ it('user can fill coach data and hold it to accept request', closure: function (
     $user = App\Models\User::factory()->create();
     actingAs($user);
 
+    $categories = CoachCategory::factory()->count(20)->create();
+
     $coachData = [
         'name' => fake()->name,
+        'categories' => $categories->random(rand(1, 2))->pluck('id')->toArray(),
         'hourly_price' => fake()->numberBetween(50000, 1000000),
         'about_me' => fake()->paragraph,
         'resume' => fake()->paragraph,
@@ -54,8 +58,11 @@ it('user cant\'t create coach if last time is make request ', function () {
     $coach = Coach::factory()->create();
     actingAs($coach->user);
 
+    $categories = CoachCategory::factory()->count(20)->create();
+
     $coachData = [
         'name' => fake()->name,
+        'categories' => $categories->random(rand(1, 2))->pluck('id')->toArray(),
         'hourly_price' => fake()->numberBetween(50000, 1000000),
         'about_me' => fake()->paragraph,
         'resume' => fake()->paragraph,
@@ -72,9 +79,12 @@ it('can update coach info', function () {
     $user = \App\Models\User::factory()->create();
     actingAs($user);
 
+    $categories = CoachCategory::factory()->count(20)->create();
+
     $coachData = [
         'name' => fake()->name,
         'user_name' => fake()->slug,
+        'categories' => $categories->random(rand(1, 2))->pluck('id')->toArray(),
         'hourly_price' => fake()->numberBetween(50000, 1000000),
         'about_me' => fake()->paragraph,
         'resume' => fake()->paragraph,

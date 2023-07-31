@@ -36,9 +36,11 @@ class MeetingDatabaseSeeder extends Seeder
         $categories = CoachCategory::all();
 
         Coach::query()->each(function (Coach $coach) use ($categories) {
-            $coach->categories()->attach(
-                $categories->random(rand(1, 3))->pluck('id')->toArray()
-            );
+
+            $categoryIds = $categories->random(rand(1, 3))->pluck('id')->toArray();
+
+            $coach->categories()->syncWithoutDetaching($categoryIds);
+
         });
 
 

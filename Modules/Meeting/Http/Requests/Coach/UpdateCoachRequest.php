@@ -18,7 +18,7 @@ class UpdateCoachRequest extends FormRequest
             'avatar' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:2048'],
             'user_name' => ['required', 'alpha_dash', Rule::unique('coaches')->ignore($this->user_name, 'user_name'), 'string', 'max:255'],
             'categories' => ['required', 'array', 'min:1', 'max:4'],
-            'categories.*' => ['required', 'numeric', 'exists:categories,id'],
+            'categories.*' => ['required', 'numeric', 'exists:coach_categories,id'],
             'hourly_price' => ['required', 'numeric', 'min:0'],
             'about_me' => ['required', 'string', 'max:1024'],
             'resume' => ['required', 'string', 'max:1024'],

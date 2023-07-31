@@ -3,7 +3,6 @@
 namespace Modules\Meeting\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
@@ -12,6 +11,7 @@ use Modules\Meeting\Entities\Coach;
 use Modules\Meeting\Entities\CoachInfo;
 use Modules\Meeting\Http\Requests\Coach\CreateCoachRequest;
 use Modules\Meeting\Http\Requests\Coach\UpdateCoachRequest;
+use Modules\Meeting\services\CoachService;
 use Modules\Meeting\Transformers\Coach\CoachListResource;
 use Modules\Meeting\Transformers\Coach\CoachResource;
 
@@ -28,7 +28,7 @@ class CoachController extends Controller
         return CoachListResource::collection($coaches);
     }
 
-    public function store(CreateCoachRequest $request): CoachResource|JsonResponse
+    public function store(CreateCoachRequest $request, CoachService $coachService): CoachResource|JsonResponse
     {
         if (auth()->user()->coach) {
             return Response::json([
@@ -38,7 +38,7 @@ class CoachController extends Controller
         }
 
         $data = $request->validated();
-        $data['avatar'] = $this->uploadAvatar($request);
+        $data['avatar'] = $coachService->uploadAvatar($request);
 
         $coachInfo = CoachInfo::create($data);
         $data['info_id'] = $coachInfo->id;
@@ -46,16 +46,9 @@ class CoachController extends Controller
 
         $coach = Coach::create($data);
 
+        $coachService->syncCategories($request, $coach);
+
         return new CoachResource($coach);
-    }
-
-    protected function uploadAvatar(Request $request): string
-    {
-        $file = $request->file('avatar');
-        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-        $filePath = $file->storeAs('public/avatars', $filename);
-
-        return $filename;
     }
 
     public function show($uuid): CoachResource
@@ -72,10 +65,11 @@ class CoachController extends Controller
             ->firstOrFail()
         );
 
+
         return new CoachResource($coach);
     }
 
-    public function update(UpdateCoachRequest $request, Coach $coach): CoachResource|JsonResponse
+    public function update(UpdateCoachRequest $request, Coach $coach, CoachService $coachService): CoachResource|JsonResponse
     {
         if (auth()->id() !== $coach->user_id) {
             return Response::json(['message' => "You Don't access to update this coach information"], 403);
@@ -83,10 +77,11 @@ class CoachController extends Controller
 
         $data = $request->validated();
 
-        $data['coach']['avatar'] = $this->uploadAvatar($request);
+        $data['coach']['avatar'] = $coachService->uploadAvatar($request);
 
         $coach->update($data['coach']);
         $coach->coachInfo()->update($data['coach_info']);
+        $coachService->syncCategories($request, $coach);
 
         return new CoachResource($coach);
     }
