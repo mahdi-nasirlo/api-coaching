@@ -7,9 +7,8 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Modules\Category\Entities\Category;
 use Modules\Meeting\Database\factories\CoachFactory;
 use Modules\Meeting\Enums\CoachStatusEnum;
 use Modules\Meeting\Observers\CoachObserver;
@@ -62,9 +61,9 @@ class Coach extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function category(): MorphMany
+    public function categories(): BelongsToMany
     {
-        return $this->morphMany(Category::class, 'categoryable');
+        return $this->belongsToMany(CoachCategory::class, 'category_coach', 'category_id', 'coach_id');
     }
 
     public function coachInfo(): BelongsTo
