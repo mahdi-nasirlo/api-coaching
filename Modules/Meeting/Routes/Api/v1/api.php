@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Meeting\Http\Controllers\CoachController;
+use Modules\Meeting\Http\Controllers\MeetingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,9 +22,15 @@ Route::prefix('coach')->name('coach.')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
 
-        Route::post('/{coach:uuid}', [CoachController::class, 'update'])->name('update');
+        Route::post('/{coach}', [CoachController::class, 'update'])->name('update');
         Route::post('/', [CoachController::class, 'store'])->name('store');
 
     });
+
+});
+
+Route::prefix('meeting')->name('meeting.')->group(function () {
+
+    Route::get('/coach/{coach}', [MeetingController::class, 'index'])->name('getAll');
 
 });
