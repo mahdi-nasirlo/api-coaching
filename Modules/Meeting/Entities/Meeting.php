@@ -2,30 +2,32 @@
 
 namespace Modules\Meeting\Entities;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Modules\Meeting\Database\factories\MeetingFactory;
 
 /**
- * @property mixed $start_time
- * @property mixed $end_time
- * @property Coach $coach
+ * @property int id
+ * @property string body
+ * @property string date
+ * @property string start_time
+ * @property string end_time
+ * @property int coach_id
+ * @property status
  */
 class Meeting extends Model
 {
     use HasFactory;
-    use HasUuids;
 
     protected $guarded = ['created_at', 'updated_at'];
 
-    public function coach(): BelongsTo
-    {
-        return $this->belongsTo(Coach::class);
-    }
-
     protected static function newFactory()
     {
-        return \Modules\Meeting\Database\factories\MeetingFactory::new();
+        return MeetingFactory::new();
+    }
+
+    public function coache()
+    {
+        return $this->belongsTo(Coach::class);
     }
 }

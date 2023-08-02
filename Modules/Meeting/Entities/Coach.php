@@ -47,6 +47,11 @@ class Coach extends Model
         return CoachFactory::new();
     }
 
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
+    }
+
     public function sluggable(): array
     {
         return [
