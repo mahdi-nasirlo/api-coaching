@@ -27,6 +27,17 @@ class MeetingService
         return $carbonTime->format('H:i');
     }
 
+    public static function getDiffHourlyStartAndEndTime($start_time, $end_time): float
+    {
+        $start_time = Carbon::createFromFormat('H:i:s', $start_time);
+        $end_time = Carbon::createFromFormat('H:i:s', $end_time);
+
+        $hoursDifference = $start_time->diffInHours($end_time);
+        $minutesDifference = $start_time->diffInMinutes($end_time) / 60;
+
+        return $hoursDifference + round($minutesDifference);
+    }
+
     public function NotBetweenMeetingRecords($coachId, $date, $start_time, $end_time): bool
     {
         return Meeting::query()
