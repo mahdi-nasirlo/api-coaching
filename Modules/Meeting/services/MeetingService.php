@@ -51,6 +51,10 @@ class MeetingService
                     ->orWhere(function (Builder $query) use ($start_time, $end_time) {
                         $query->where('start_time', '<', $start_time)
                             ->where('end_time', '>', $start_time);
+                    })
+                    ->orWhere(function (Builder $query) use ($start_time, $end_time) {
+                        $query->where('start_time', '=', $start_time)
+                            ->where('end_time', '=', $end_time);
                     });
             })
             ->doesntExist();
