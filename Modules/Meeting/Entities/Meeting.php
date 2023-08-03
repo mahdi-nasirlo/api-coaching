@@ -2,9 +2,12 @@
 
 namespace Modules\Meeting\Entities;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Meeting\Database\factories\MeetingFactory;
+use Modules\Meeting\Enums\MeetingStatusEnums;
 
 /**
  * @property int id
@@ -13,7 +16,8 @@ use Modules\Meeting\Database\factories\MeetingFactory;
  * @property string start_time
  * @property string end_time
  * @property int coach_id
- * @property status
+ * @property MeetingStatusEnums status
+ * @method  activeStatus()
  */
 class Meeting extends Model
 {
@@ -21,13 +25,26 @@ class Meeting extends Model
 
     protected $guarded = ['created_at', 'updated_at'];
 
-    protected static function newFactory()
+    protected $casts = ['status' => MeetingStatusEnums::class];
+
+    protected static function newFactory(): MeetingFactory
     {
         return MeetingFactory::new();
     }
 
-    public function coache()
+    public function ScopeActiveStatus($query)
+    {
+        return $query->where('status', MeetingStatusEnums::ACTIVE->value);
+    }
+
+    public function ScopeAvailableDate($query)
+    {
+        return $query->where('date', '>', Carbon::now()->subDays(7));
+    }
+
+    public function coach(): BelongsTo
     {
         return $this->belongsTo(Coach::class);
     }
+
 }
