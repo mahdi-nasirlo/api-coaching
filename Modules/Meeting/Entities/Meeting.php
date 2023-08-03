@@ -47,4 +47,8 @@ class Meeting extends Model
         return $this->belongsTo(Coach::class);
     }
 
+    public function Booking(): BelongsTo
+    {
+        return $this->belongsTo(BookingMeeting::class);
+    }
 }
