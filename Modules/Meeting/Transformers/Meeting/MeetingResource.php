@@ -3,7 +3,9 @@
 namespace Modules\Meeting\Transformers\Meeting;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Carbon;
 use Modules\Meeting\Entities\Meeting;
+use Modules\Meeting\services\MeetingService;
 
 /**
  * @mixin Meeting
@@ -14,9 +16,8 @@ class MeetingResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'date' => $this->date,
-            'start_time' => $this->start_time,
-            'end_time' => $this->end_time,
+            'date' => Carbon::parse($this->date)->format('Y/m/d'),
+            'time' => MeetingService::roundToNearest15Minutes($this->start_time) . " - " . MeetingService::roundToNearest15Minutes($this->end_time),
             'body' => $this->body,
         ];
     }

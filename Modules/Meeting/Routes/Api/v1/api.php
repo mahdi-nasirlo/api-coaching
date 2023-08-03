@@ -29,7 +29,7 @@ Route::prefix('coach')->name('coach.')->group(function () {
 
 });
 
-Route::prefix('meeting/coach/')->name('meeting.')->group(function () {
+Route::middleware('auth:sanctum')->prefix('meeting/coach/')->name('meeting.')->group(function () {
 
     Route::get('{coach}', [MeetingController::class, 'index'])->name('getAll');
 
