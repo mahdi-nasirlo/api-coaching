@@ -29,10 +29,14 @@ Route::prefix('coach')->name('coach.')->group(function () {
 
 });
 
-Route::prefix('meeting/coach')->name('meeting.')->group(function () {
+Route::prefix('meeting')->name('meeting.')->group(function () {
 
-    Route::get('/{coach}', [MeetingController::class, 'index'])->name('getAll');
+    Route::get('/coach/{coach}', [MeetingController::class, 'index'])->name('getAll');
 
-    Route::middleware('auth:sanctum')->post('/{coach}', [MeetingController::class, 'store'])->name('create');
+    Route::middleware('auth:sanctum')->group(function () {
 
+        Route::post('/coach/{coach}', [MeetingController::class, 'store'])->name('create');
+        Route::get('/toggleStatus/{meeting}', [MeetingController::class, 'toggleStatus'])->name('toggleStatus');
+
+    });
 });

@@ -5,6 +5,8 @@ namespace Modules\Meeting\Http\Controllers;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
 use Modules\Meeting\Entities\Coach;
+use Modules\Meeting\Entities\Meeting;
+use Modules\Meeting\Enums\MeetingStatusEnums;
 use Modules\Meeting\Http\Requests\Meeting\CreateMeeting;
 use Modules\Meeting\Transformers\Meeting\MeetingResource;
 
@@ -22,5 +24,19 @@ class MeetingController extends Controller
         $coach->meeting()->create($request->toArray());
 
         return Response::json(['status' => 'true', 'message' => 'meeting create successfully']);
+    }
+
+    public function toggleStatus(Meeting $meeting)
+    {
+        if ($meeting->status->isActive())
+            $meeting->update(['status' => MeetingStatusEnums::DEACTIVATE->value]);
+        else
+            $meeting->update(['status' => MeetingStatusEnums::ACTIVE]);
+
+        return Response::json([
+            'status' => true,
+            'message' => "meeting status is toggled",
+            'date' => new MeetingResource($meeting),
+        ]);
     }
 }
