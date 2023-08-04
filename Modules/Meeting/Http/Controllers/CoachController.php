@@ -48,7 +48,7 @@ class CoachController extends Controller
 
         $coachService->syncCategories($request, $coach);
 
-        return new CoachResource($coach);
+        return Response::json(['status' => true, 'message' => 'coach create successfully']);
     }
 
     public function show($uuid): CoachResource

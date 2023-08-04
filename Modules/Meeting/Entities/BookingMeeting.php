@@ -26,6 +26,6 @@ class BookingMeeting extends Model
 
     public function meeting(): HasOne
     {
-        return $this->hasOne(Meeting::class);
+        return $this->hasOne(Meeting::class, 'id');
     }
 }

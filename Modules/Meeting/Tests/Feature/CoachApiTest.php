@@ -44,7 +44,7 @@ it('user can fill coach data and hold it to accept request', closure: function (
     ];
 
     $res = $this->postJson(route('coach.store'), $coachData);
-    $res->assertStatus(201);
+    $res->assertStatus(200);
 
     $user->refresh();
 
@@ -74,15 +74,14 @@ it('user cant\'t create coach if last time is make request ', function () {
         ->assertStatus(403);
 });
 
-it('can update coach info', function () {
+it('can update coach data', function () {
+    $this->actingAs($user = \App\Models\User::factory()->create());
 
-    $user = \App\Models\User::factory()->create();
-    actingAs($user);
+    $coach = Coach::factory()->create(['user_id' => $user->id]);
 
     $categories = CoachCategory::factory()->count(20)->create();
-
-    $coachData = [
-        'name' => fake()->name,
+    $updatedData = [
+        'name' => 'test user',
         'user_name' => fake()->slug,
         'categories' => $categories->random(rand(1, 2))->pluck('id')->toArray(),
         'hourly_price' => fake()->numberBetween(50000, 1000000),
@@ -91,15 +90,19 @@ it('can update coach info', function () {
         'avatar' => UploadedFile::fake()->image('avatar.jpg'),
     ];
 
-    $res = $this->postJson(route('coach.store'), $coachData)
-        ->assertStatus(201);
+    $response = $this->postJson(route('coach.update', $coach), $updatedData);
 
-    $coachData['name'] = 'test user';
+    $response->assertStatus(200);
 
-    $update = $this->postJson('api/v1/coach/' . $res->json()['data']['username'], $coachData);
+    $this->assertDatabaseHas('coaches', [
+        'name' => $updatedData['name'],
+        'hourly_price' => $updatedData['hourly_price'],
+        'user_name' => $updatedData['user_name'],
+    ]);
 
-    $coach = $user->refresh()->coach;
+    $this->assertDatabaseHas('coach_infos', [
+        'resume' => $updatedData['resume'],
+    ]);
 
-    expect($coach->name)->toBe('test user')
-        ->and($coach->status)->toBe(CoachStatusEnum::PENDING);
+    expect($coach->categories()->exists())->toBeTrue();
 });
