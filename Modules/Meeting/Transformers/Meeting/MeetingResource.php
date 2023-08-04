@@ -16,7 +16,7 @@ class MeetingResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'is_active' => $this->status->isActive(),
+            'is_reserved ' => $this->status->isReserved(),
             'date' => Carbon::parse($this->date)->format('Y/m/d'),
             'time' => MeetingService::roundToNearest15Minutes($this->start_time) . " - " . MeetingService::roundToNearest15Minutes($this->end_time),
             'body' => $this->body,

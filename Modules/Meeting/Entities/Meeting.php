@@ -34,7 +34,7 @@ class Meeting extends Model
 
     public function ScopeActiveStatus($query)
     {
-        return $query->where('status', MeetingStatusEnums::ACTIVE->value);
+        return $query->whereIn('status', [MeetingStatusEnums::ACTIVE->value, MeetingStatusEnums::RESERVED->value]);
     }
 
     public function ScopeAvailableDate($query)

@@ -12,7 +12,7 @@ class MeetingController extends Controller
 {
     public function index(Coach $coach)
     {
-        $meetings = $coach->meeting()->availableDate()->get();
+        $meetings = $coach->meeting()->availableDate()->activeStatus()->get();
 
         return MeetingResource::collection($meetings)->collection->groupBy('date');
     }
