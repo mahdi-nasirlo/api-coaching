@@ -3,6 +3,7 @@
 namespace Modules\Meeting\Http\Controllers;
 
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Modules\Meeting\Entities\Coach;
 use Modules\Meeting\Entities\Meeting;
@@ -16,7 +17,11 @@ class MeetingController extends Controller
     {
         $meetings = $coach->meeting()->availableDate()->activeStatus()->get();
 
-        return MeetingResource::collection($meetings)->collection->groupBy('date');
+        return Cache::remember(
+            'coachMeetingList' . $coach->uuid,
+            60 * 60 * 2,
+            fn() => MeetingResource::collection($meetings)->collection->groupBy('date')
+        );
     }
 
     public function store(CreateMeeting $request, Coach $coach)
