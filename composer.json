@@ -24,6 +24,7 @@
         "mohamedsabil83/filament-forms-tinyeditor": "^1.7",
         "nwidart/laravel-modules": "^10.0",
         "realmrhex/filament-modular": "^0.2.0",
+        "shetabit/payment": "^5.4",
         "webpatser/laravel-uuid": "^4.0"
     },
     "require-dev": {
