@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Modules\Meeting\Entities\Coach;
+
+/**
+ * @property string $name
+ * @property string $email
+ * @method static create(array $array)
+ */
 
 class User extends Authenticatable
 {
@@ -42,4 +49,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function coach()
+    {
+        return $this->hasOne(Coach::class, 'user_id');
+    }
 }
