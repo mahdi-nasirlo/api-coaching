@@ -5,7 +5,6 @@ namespace Modules\Meeting\Entities;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Modules\Meeting\Database\factories\BookingMeetingFactory;
 use Modules\Meeting\Observers\BookingMeetingObserver;
 
 class BookingMeeting extends Model

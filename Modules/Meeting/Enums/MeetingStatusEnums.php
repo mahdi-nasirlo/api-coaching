@@ -16,6 +16,6 @@ enum MeetingStatusEnums: int
 
     public function isReserved(): bool|null
     {
-        return $this->value == self::DEACTIVATE ? null : $this->value == self::RESERVED->value;
+        return $this->value == self::DEACTIVATE->value ? null : $this->value == self::RESERVED->value;
     }
 }
