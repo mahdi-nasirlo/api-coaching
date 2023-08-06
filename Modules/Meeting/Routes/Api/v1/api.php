@@ -35,7 +35,6 @@ Route::prefix('meeting')->name('meeting.')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
 
-        Route::post('/coach/{coach}', [MeetingController::class, 'store'])->name('create');
         Route::get('/toggleStatus/{meeting}', [MeetingController::class, 'toggleStatus'])->name('toggleStatus');
 
     });

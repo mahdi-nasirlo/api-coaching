@@ -2,6 +2,7 @@
 
 namespace Modules\Meeting\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
@@ -24,14 +25,14 @@ class MeetingController extends Controller
         );
     }
 
-    public function store(CreateMeeting $request, Coach $coach)
+    public function store(CreateMeeting $request, Coach $coach, PaymentService $paymentService): JsonResponse
     {
         $coach->meeting()->create($request->toArray());
 
         return Response::json(['status' => 'true', 'message' => 'meeting create successfully']);
     }
 
-    public function toggleStatus(Meeting $meeting)
+    public function toggleStatus(Meeting $meeting): JsonResponse
     {
         if ($meeting->status->isActive())
             $meeting->update(['status' => MeetingStatusEnums::DEACTIVATE->value]);
