@@ -6,6 +6,8 @@ use Modules\Meeting\Entities\BookingMeeting;
 use Modules\Meeting\Entities\Coach;
 use Modules\Meeting\Entities\Meeting;
 use Modules\Meeting\Enums\MeetingStatusEnums;
+use Modules\Payment\Entities\Cart;
+use Nwidart\Modules\Facades\Module;
 
 uses(
     Tests\TestCase::class,
@@ -18,12 +20,18 @@ it('can see list of meeting by coach username (v1)', function () {
     $meeting2 = Meeting::factory(['date' => now()->subDay()])->create(['coach_id' => $coach->id]);
     $meeting1 = Meeting::factory(['date' => now()])->create(['coach_id' => $coach->id]);
 
-    BookingMeeting::query()->create([
+    $bookingData = [
         'user_id' => User::query()->inRandomOrder()->first()->id,
         'coach_id' => $coach->id,
         'meeting_id' => $meeting1->id,
         'amount' => 0,
-    ]);
+    ];
+
+    if (Module::has("Payment")) {
+        $bookingData['cart_id'] = Cart::query()->create(['amount' => 10000])->id;
+    }
+
+    BookingMeeting::query()->create($bookingData);
 
     $response = $this->get(route('meeting.getAll', ['coach' => $coach]));
 

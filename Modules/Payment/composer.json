@@ -11,6 +11,10 @@
         "laravel": {
             "providers": [],
             "aliases": {
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/module/payment
             }
         }
     },

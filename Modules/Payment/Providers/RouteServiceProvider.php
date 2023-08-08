@@ -39,6 +39,7 @@ class RouteServiceProvider extends ServiceProvider
     }
 
     /**
+<<<<<<< HEAD
      * Define the "api" routes for the application.
      *
      * These routes are typically stateless.
@@ -54,6 +55,8 @@ class RouteServiceProvider extends ServiceProvider
     }
 
     /**
+=======
+>>>>>>> origin/module/payment
      * Define the "web" routes for the application.
      *
      * These routes all receive session state, CSRF protection, etc.
@@ -66,4 +69,22 @@ class RouteServiceProvider extends ServiceProvider
             ->namespace($this->moduleNamespace)
             ->group(module_path('Payment', '/Routes/web.php'));
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * Define the "api" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapApiRoutes()
+    {
+        Route::prefix('api/v1')
+            ->middleware('api')
+            ->namespace($this->moduleNamespace)
+            ->group(module_path('Payment', '/Routes/Api/v1/api.php'));
+    }
+>>>>>>> origin/module/payment
 }
