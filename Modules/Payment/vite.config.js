@@ -1,13 +1,9 @@
 const dotenvExpand = require('dotenv-expand');
-<<<<<<< HEAD
-dotenvExpand(require('dotenv').config({path: '../../.env'/*, debug: true*/}));
 
-import {defineConfig} from 'vite';
-=======
 dotenvExpand(require('dotenv').config({ path: '../../.env'/*, debug: true*/}));
 
 import { defineConfig } from 'vite';
->>>>>>> origin/module/payment
+
 import laravel from 'laravel-vite-plugin';
 
 export default defineConfig({

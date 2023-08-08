@@ -2,14 +2,10 @@
 
 namespace Modules\Payment\Providers;
 
-<<<<<<< HEAD
 use Config;
 use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\ServiceProvider;
-=======
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Eloquent\Factory;
->>>>>>> origin/module/payment
+
 
 class PaymentServiceProvider extends ServiceProvider
 {
@@ -34,34 +30,6 @@ class PaymentServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
-    }
-
-    /**
-<<<<<<< HEAD
-     * Register translations.
-     *
-     * @return void
-     */
-    public function registerTranslations()
-    {
-        $langPath = resource_path('lang/modules/' . $this->moduleNameLower);
-
-        if (is_dir($langPath)) {
-            $this->loadTranslationsFrom($langPath, $this->moduleNameLower);
-            $this->loadJsonTranslationsFrom($langPath);
-        } else {
-            $this->loadTranslationsFrom(module_path($this->moduleName, 'Resources/lang'), $this->moduleNameLower);
-            $this->loadJsonTranslationsFrom(module_path($this->moduleName, 'Resources/lang'));
-        }
-=======
-     * Register the service provider.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        $this->app->register(RouteServiceProvider::class);
->>>>>>> origin/module/payment
     }
 
     /**
@@ -97,7 +65,7 @@ class PaymentServiceProvider extends ServiceProvider
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
     }
 
-<<<<<<< HEAD
+
     private function getPublishableViewPaths(): array
     {
         $paths = [];
@@ -117,7 +85,7 @@ class PaymentServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->register(RouteServiceProvider::class);
-=======
+    }
     /**
      * Register translations.
      *
@@ -134,7 +102,6 @@ class PaymentServiceProvider extends ServiceProvider
             $this->loadTranslationsFrom(module_path($this->moduleName, 'Resources/lang'), $this->moduleNameLower);
             $this->loadJsonTranslationsFrom(module_path($this->moduleName, 'Resources/lang'));
         }
->>>>>>> origin/module/payment
     }
 
     /**
@@ -146,18 +113,5 @@ class PaymentServiceProvider extends ServiceProvider
     {
         return [];
     }
-<<<<<<< HEAD
-=======
 
-    private function getPublishableViewPaths(): array
-    {
-        $paths = [];
-        foreach (\Config::get('view.paths') as $path) {
-            if (is_dir($path . '/modules/' . $this->moduleNameLower)) {
-                $paths[] = $path . '/modules/' . $this->moduleNameLower;
-            }
-        }
-        return $paths;
-    }
->>>>>>> origin/module/payment
 }

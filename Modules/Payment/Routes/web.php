@@ -11,10 +11,3 @@
 |
 */
 
-<<<<<<< HEAD
-Route::prefix('payment')->group(function () {
-=======
-Route::prefix('payment')->group(function() {
->>>>>>> origin/module/payment
-    Route::get('/', 'PaymentController@index');
-});
