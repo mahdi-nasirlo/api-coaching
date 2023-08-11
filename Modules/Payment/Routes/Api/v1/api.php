@@ -1,8 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Modules\Payment\Http\Controllers\MeetingPayController;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,10 +11,3 @@ use Modules\Payment\Http\Controllers\MeetingPayController;
 |
 */
 
-Route::middleware('api:sanctum')->prefix("payment")->name('payment.')->group(function () {
-
-    Route::get('/meeting/{meeting}', [MeetingPayController::class, 'payment'])->name('meeting');
-
-    Route::get('/meeting/reserve/{meeting}', [MeetingPayController::class, 'store'])->name('meeting.reserve');
-
-});
