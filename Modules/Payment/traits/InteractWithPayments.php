@@ -17,12 +17,14 @@ trait InteractWithPayments
     {
         $invoice = (new Invoice)->amount($amount);
 
-        return Payment::callbackUrl($callbackUrl)->purchase(
+        $response = Payment::callbackUrl($callbackUrl)->purchase(
             $invoice,
             function ($driver, $transactionId) use ($callback) {
                 $callback($driver, $transactionId);
             }
         )->pay()->toJson();
+
+        return json_decode($response);
     }
 
     public function verifyTransaction(Transaction $transaction, Closure|null $tryCallback = null, Closure|null $catchCallback = null)

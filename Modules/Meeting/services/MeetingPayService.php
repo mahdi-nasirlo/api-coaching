@@ -17,20 +17,40 @@ class MeetingPayService extends MeetingService
 
         $verifyCode = md5(uniqid());
 
-        $callbackUrl = route('meeting.reserve.verify', ['transaction' => $verifyCode, 'url' => $url]);
+        $callbackUrl = $this->getMeetingVerifyUrl($verifyCode, $url);
 
-        $result = $this->getPaymentJson(
+        return $this->getPaymentJson(
             $callbackUrl,
             $amount,
             function ($driver, $transactionId) use ($meeting, $verifyCode, $amount) {
-                $meeting->transaction()->create([
+                $meeting->transaction()->updateOrCreate([
                     'resnumber' => $transactionId,
                     'verify_code' => $verifyCode,
                     'amount' => $amount
                 ]);
             });
+    }
 
-        return json_decode($result);
+    public function getMeetingVerifyUrl($verifyCode, $url = null): string
+    {
+        return route('meeting.reserve.verify', ['transaction' => $verifyCode, 'url' => $url]);
+    }
+
+    public function transactionPay(Transaction $transaction, string|null $url = null)
+    {
+        $verifyCode = $transaction->verify_code;
+
+        $callbackUrl = $this->getMeetingVerifyUrl($verifyCode, $url);
+
+        return $this->getPaymentJson(
+            $callbackUrl,
+            $transaction->amount,
+            function ($driver, $transactionId) use ($transaction) {
+                Transaction::query()->updateOrCreate(
+                    ['verify_code' => $transaction->verify_code],
+                    ['resnumber' => $transactionId]
+                );
+            });
     }
 
     public function verifyMeetingPay(Transaction $transaction)
