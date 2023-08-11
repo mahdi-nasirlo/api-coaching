@@ -27,6 +27,11 @@ class MeetingService
         return $carbonTime->format('H:i');
     }
 
+    public static function getTotalPrice(Meeting $meeting): float|int
+    {
+        return $meeting->coach->hourly_price * self::getDiffHourlyStartAndEndTime($meeting->start_time, $meeting->end_time);
+    }
+
     public static function getDiffHourlyStartAndEndTime($start_time, $end_time): float
     {
         $start_time = Carbon::createFromFormat('H:i:s', $start_time);

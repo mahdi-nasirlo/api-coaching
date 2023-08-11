@@ -24,14 +24,14 @@ class Transaction extends Model
         return TransactionFactory::new();
     }
 
+    public function getMeeting(): ?MorphTo
+    {
+        return $this->transaction_able_type == Meeting::class ? $this->transaction_able() : null;
+    }
+
     public function transaction_able(): MorphTo
     {
         return $this->morphTo('transaction_able', 'transaction_able_type', 'transaction_able_id');
-    }
-
-    public function getMeeting()
-    {
-        return $this->transaction_able_type == Meeting::class ? $this->transaction_able : null;
     }
 }
 
