@@ -7,12 +7,8 @@ use Modules\Meeting\Entities\BookingMeeting;
 use Modules\Meeting\Entities\Meeting;
 use Modules\Meeting\Enums\MeetingStatusEnums;
 use Modules\Meeting\services\MeetingService;
+use Modules\Payment\Enums\PaymentStatusEnum;
 
-/**
- * TODO: return transaction id in success payment with response
- * TODO: return unsuccessful payment response
- * TODO: store cart item in transaction ID
- */
 class BookingMeetTableSeeder extends Seeder
 {
     /**
@@ -34,7 +30,7 @@ class BookingMeetTableSeeder extends Seeder
 
             $meeting->update(['status' => MeetingStatusEnums::RESERVED->value]);
 
-            $meeting->transaction()->update(['status' => 1]);
+            $meeting->transaction()->update(['status' => PaymentStatusEnum::PAID->value]);
 
         });
     }

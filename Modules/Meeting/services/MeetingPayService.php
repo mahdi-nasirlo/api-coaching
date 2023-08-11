@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Response;
 use Modules\Meeting\Entities\Meeting;
 use Modules\Meeting\Enums\MeetingStatusEnums;
 use Modules\Payment\Entities\Transaction;
+use Modules\Payment\Enums\PaymentStatusEnum;
 use Shetabit\Multipay\Exceptions\InvalidPaymentException;
 use Shetabit\Multipay\Invoice;
 use Shetabit\Payment\Facade\Payment;
@@ -43,7 +44,7 @@ class MeetingPayService extends MeetingService
 
             DB::transaction(function () use ($transaction) {
 
-                $transaction->update(['status' => 1]);
+                $transaction->update(['status' => PaymentStatusEnum::PAID->value]);
 
                 $transaction->getMeeting()->update(['status' => MeetingStatusEnums::RESERVED->value]);
 
@@ -52,6 +53,8 @@ class MeetingPayService extends MeetingService
             return Response::json(['message' => $receipt->getReferenceId()]);
 
         } catch (InvalidPaymentException $exception) {
+
+            $transaction->update(['status' => PaymentStatusEnum::UNSUCCESSFUL->value]);
 
             return Response::json(['message' => $exception->getMessage()]);
         }
