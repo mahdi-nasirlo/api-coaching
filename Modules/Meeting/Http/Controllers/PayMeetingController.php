@@ -18,11 +18,18 @@ class PayMeetingController extends Controller
         if ($meetingService->is_reserved($meeting))
             return Response::json(['status' => false]);
 
-        return $meetingService->meetingPay($meeting, url: $data['url']);
+        $test = $meetingService->meetingPay($meeting, url: $data['url']);
+
+        return Response::json(['data' => $test]);
     }
 
     public function reserved(Transaction $transaction, MeetingPayService $meetingService)
     {
         return $meetingService->verifyMeetingPay($transaction);
+    }
+
+    public function rePay()
+    {
+
     }
 }
