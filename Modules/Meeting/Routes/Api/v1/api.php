@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Meeting\Http\Controllers\CoachController;
 use Modules\Meeting\Http\Controllers\MeetingController;
+use Modules\Meeting\Http\Controllers\PayMeetingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +36,18 @@ Route::prefix('meeting')->name('meeting.')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
 
+        Route::post('/create', [MeetingController::class, 'store'])->name('create');
+
         Route::get('/toggleStatus/{meeting}', [MeetingController::class, 'toggleStatus'])->name('toggleStatus');
 
+        Route::prefix('/reserve')->name('reserve.')->group(callback: function () {
+
+            Route::get('/{meeting}/pay', [PayMeetingController::class, 'payment'])->name('pay');
+
+        });
+
     });
+
+    Route::get('/{transaction:verify_code}/reserve', [PayMeetingController::class, 'reserved'])->name('reserve.verify');
+
 });

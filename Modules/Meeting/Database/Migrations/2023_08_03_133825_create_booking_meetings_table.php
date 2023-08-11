@@ -19,12 +19,7 @@ return new class extends Migration {
             $table->foreign('meeting_id')
                 ->references('id')->on('meetings')
                 ->onDelete('set null');
-
-            $table->unsignedBigInteger('coach_id')->nullable();
-            $table->foreign('coach_id')
-                ->references('id')->on('coaches')
-                ->onDelete('set null');
-
+            
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')
                 ->references('id')->on('users')

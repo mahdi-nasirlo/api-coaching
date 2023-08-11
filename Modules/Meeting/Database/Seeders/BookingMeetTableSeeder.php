@@ -2,16 +2,17 @@
 
 namespace Modules\Meeting\Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Seeder;
 use Modules\Meeting\Entities\BookingMeeting;
-use Modules\Meeting\Entities\Coach;
 use Modules\Meeting\Entities\Meeting;
 use Modules\Meeting\Enums\MeetingStatusEnums;
 use Modules\Meeting\services\MeetingService;
-use Modules\Payment\Entities\Cart;
-use Nwidart\Modules\Facades\Module;
 
+/**
+ * TODO: return transaction id in success payment with response
+ * TODO: return unsuccessful payment response
+ * TODO: store cart item in transaction ID
+ */
 class BookingMeetTableSeeder extends Seeder
 {
     /**
@@ -23,39 +24,18 @@ class BookingMeetTableSeeder extends Seeder
     {
         BookingMeeting::query()->truncate();
 
-        Meeting::query()->each(function (Meeting $meeting) {
+        Meeting::query()->inRandomOrder()->get()->take(rand(3, Meeting::all()->count()))->each(function (Meeting $meeting) {
 
-            $coach = Coach::with('meeting')->inRandomOrder()->acceptedStatus()->first();
+            $meeting->transaction()->create([
+                'resnumber' => md5(uniqid()),
+                'verify_code' => md5(uniqid()),
+                'amount' => MeetingService::getTotalPrice($meeting)
+            ]);
 
-            $meeting = Meeting::query()
-                ->where('coach_id', $coach->id)->where('status', MeetingStatusEnums::ACTIVE->value)
-                ->inRandomOrder()
-                ->first();
+            $meeting->update(['status' => MeetingStatusEnums::RESERVED->value]);
 
-            if ($meeting) {
+            $meeting->transaction()->update(['status' => 1]);
 
-                $bookingData = [
-                    'user_id' => User::query()->inRandomOrder()->first()->id,
-                    'coach_id' => $coach->id,
-                    'meeting_id' => $meeting->id,
-                    'amount' => $coach->hourly_price * MeetingService::getDiffHourlyStartAndEndTime($meeting->start_time, $meeting->end_time),
-                ];
-
-                if (Module::has('Payment')) {
-
-                    $cart = Cart::query()->create([
-                        'amount' => 100000,
-                    ]);
-
-                    $bookingData['cart_id'] = $cart->id;
-
-                }
-                
-                BookingMeeting::query()->create($bookingData);
-
-                $meeting->update(['status' => MeetingStatusEnums::RESERVED->value]);
-
-            }
         });
     }
 }

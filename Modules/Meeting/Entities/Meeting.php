@@ -6,8 +6,11 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Modules\Meeting\Database\factories\MeetingFactory;
 use Modules\Meeting\Enums\MeetingStatusEnums;
+use Modules\Payment\Entities\Transaction;
 
 /**
  * @property int id
@@ -47,8 +50,13 @@ class Meeting extends Model
         return $this->belongsTo(Coach::class);
     }
 
-    public function Booking(): BelongsTo
+    public function booking(): HasOne
     {
-        return $this->belongsTo(BookingMeeting::class);
+        return $this->hasOne(BookingMeeting::class);
+    }
+
+    public function transaction(): MorphOne
+    {
+        return $this->morphOne(Transaction::class, 'transaction_able');
     }
 }
