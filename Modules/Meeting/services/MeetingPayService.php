@@ -57,4 +57,9 @@ class MeetingPayService extends MeetingService
         }
     }
 
+    public function is_reserved(Meeting $meeting): bool
+    {
+        return $meeting->status->isReserved() && $meeting->transaction()->where('status', 1)->exists();
+    }
+
 }
