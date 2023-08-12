@@ -15,6 +15,14 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
+        if ($request->expectsJson() && $request->wantsJson()) {
+            return null;
+        }
+
+        if ($request->is('api/*')) {
+            abort(403);
+        }
+
         return Filament::getLoginUrl();
     }
 }
