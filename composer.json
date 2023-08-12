@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "coolsam/modules": "^3.0@beta",
         "cviebrock/eloquent-sluggable": "^10.0",
         "filament/filament": "^3.0",
         "filament/spatie-laravel-media-library-plugin": "^3.0",
