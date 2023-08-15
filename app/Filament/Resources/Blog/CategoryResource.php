@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\App\Resources\Blog;
+namespace App\Filament\Resources\Blog;
 
 use App\Filament\Resources\Blog\CategoryResource\Pages;
 use App\Models\Blog\Category;
@@ -117,7 +117,7 @@ class CategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => \App\Filament\App\Resources\Blog\CategoryResource\Pages\ManageCategories::route('/'),
+            'index' => Pages\ManageCategories::route('/'),
         ];
     }
 }

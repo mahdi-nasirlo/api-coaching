@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\App\Resources\Blog\CategoryResource\Pages;
+namespace App\Filament\Resources\Blog\CategoryResource\Pages;
 
-use App\Filament\App\Resources\Blog\CategoryResource;
+use App\Filament\Resources\Blog\CategoryResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ManageRecords;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\App\Resources\Blog;
+namespace App\Filament\Resources\Blog;
 
 use App\Filament\Resources\Blog\AuthorResource\Pages;
 use App\Models\Blog\Author;
@@ -110,7 +110,7 @@ class AuthorResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => \App\Filament\App\Resources\Blog\AuthorResource\Pages\ManageAuthors::route('/'),
+            'index' => Pages\ManageAuthors::route('/'),
         ];
     }
 }
