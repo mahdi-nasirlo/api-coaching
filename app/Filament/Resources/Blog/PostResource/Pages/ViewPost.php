@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\Blog\PostResource\Pages;
 
-use App\Filament\App\Resources\Blog\PostResource;
+use App\Filament\Resources\Blog\PostResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 

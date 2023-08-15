@@ -3,19 +3,38 @@
 namespace App\Filament\Resources\Blog;
 
 use App\Filament\App\Resources\Blog;
+use App\Filament\Resources\Blog\PostResource\Pages\CreatePost;
+use App\Filament\Resources\Blog\PostResource\Pages\EditPost;
+use App\Filament\Resources\Blog\PostResource\Pages\ListPosts;
+use App\Filament\Resources\Blog\PostResource\Pages\ViewPost;
 use App\Models\Blog\Post;
-use Filament\Forms;
+use Carbon\Carbon;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Group;
+use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieTagsInput;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
 use Filament\Infolists\Components;
 use Filament\Infolists\Infolist;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class PostResource extends Resource
@@ -36,49 +55,49 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('image')
+                ImageColumn::make('image')
                     ->label('Image'),
 
-                Tables\Columns\TextColumn::make('title')
+                TextColumn::make('title')
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('slug')
+                TextColumn::make('slug')
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                Tables\Columns\TextColumn::make('author.name')
+                TextColumn::make('author.name')
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
 
-                Tables\Columns\BadgeColumn::make('status')
+                BadgeColumn::make('status')
                     ->getStateUsing(fn(Post $record): string => $record->published_at?->isPast() ? 'Published' : 'Draft')
                     ->colors([
                         'success' => 'Published',
                     ]),
 
-                Tables\Columns\TextColumn::make('category.name')
+                TextColumn::make('category.name')
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                Tables\Columns\TextColumn::make('published_at')
+                TextColumn::make('published_at')
                     ->label('Published Date')
                     ->date(),
 
-                Tables\Columns\TextColumn::make('comments.customer.name')
+                TextColumn::make('comments.customer.name')
                     ->label('Comment Authors')
                     ->listWithLineBreaks()
                     ->limitList(2),
             ])
             ->filters([
-                Tables\Filters\Filter::make('published_at')
+                Filter::make('published_at')
                     ->form([
-                        Forms\Components\DatePicker::make('published_from')
+                        DatePicker::make('published_from')
                             ->placeholder(fn($state): string => 'Dec 18, ' . now()->subYear()->format('Y')),
-                        Forms\Components\DatePicker::make('published_until')
+                        DatePicker::make('published_until')
                             ->placeholder(fn($state): string => now()->format('M d, Y')),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
@@ -105,14 +124,14 @@ class PostResource extends Resource
                     }),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                ViewAction::make(),
 
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
 
-                Tables\Actions\DeleteAction::make(),
+                DeleteAction::make(),
             ])
             ->groupedBulkActions([
-                Tables\Actions\DeleteBulkAction::make()
+                DeleteBulkAction::make()
                     ->action(function () {
                         Notification::make()
                             ->title('Now, now, don\'t be cheeky, leave some records for others to play with!')
@@ -126,45 +145,42 @@ class PostResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Group::make()
+                Group::make()
                     ->schema([
-                        Forms\Components\Section::make()
+                        Section::make()
                             ->schema([
-                                Forms\Components\TextInput::make('title')
+                                TextInput::make('title')
                                     ->required()
                                     ->live(onBlur: true)
-                                    ->afterStateUpdated(fn(string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null),
+                                    ->afterStateUpdated(fn(string $operation, $state, Set $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null),
 
-                                Forms\Components\TextInput::make('slug')
+                                TextInput::make('slug')
                                     ->disabled()
                                     ->dehydrated()
                                     ->required()
                                     ->unique(Post::class, 'slug', ignoreRecord: true),
 
-                                Forms\Components\MarkdownEditor::make('content')
+                                MarkdownEditor::make('content')
                                     ->required()
                                     ->columnSpan('full'),
 
-                                Forms\Components\Select::make('blog_author_id')
-                                    ->relationship('author', 'name')
-                                    ->searchable()
-                                    ->required(),
 
-                                Forms\Components\Select::make('blog_category_id')
+                                Select::make('blog_category_id')
+                                    ->preload()
                                     ->relationship('category', 'name')
                                     ->searchable()
                                     ->required(),
 
-                                Forms\Components\DatePicker::make('published_at')
+                                DatePicker::make('published_at')
                                     ->label('Published Date'),
 
                                 SpatieTagsInput::make('tags'),
                             ])
                             ->columns(2),
 
-                        Forms\Components\Section::make('Image')
+                        Section::make('Image')
                             ->schema([
-                                Forms\Components\FileUpload::make('image')
+                                FileUpload::make('image')
                                     ->label('Image')
                                     ->image()
                                     ->disableLabel(),
@@ -173,13 +189,13 @@ class PostResource extends Resource
                     ])
                     ->columnSpan(['lg' => fn(?Post $record) => $record === null ? 3 : 2]),
 
-                Forms\Components\Section::make()
+                Section::make()
                     ->schema([
-                        Forms\Components\Placeholder::make('created_at')
+                        Placeholder::make('created_at')
                             ->label('Created at')
                             ->content(fn(Post $record): ?string => $record->created_at?->diffForHumans()),
 
-                        Forms\Components\Placeholder::make('updated_at')
+                        Placeholder::make('updated_at')
                             ->label('Last modified at')
                             ->content(fn(Post $record): ?string => $record->updated_at?->diffForHumans()),
                     ])
@@ -213,8 +229,7 @@ class PostResource extends Resource
                                         Components\TextEntry::make('author.name'),
                                         Components\TextEntry::make('category.name'),
                                         Components\TextEntry::make('tags')
-                                            ->badge()
-                                            ->getStateUsing(fn() => ['one', 'two', 'three', 'four']),
+                                            ->badge(),
                                     ]),
                                 ]),
                             Components\ImageEntry::make('image')
@@ -243,10 +258,10 @@ class PostResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Blog\PostResource\Pages\ListPosts::route('/'),
-            'create' => Blog\PostResource\Pages\CreatePost::route('/create'),
-            'edit' => Blog\PostResource\Pages\EditPost::route('/{record}/edit'),
-            'view' => Blog\PostResource\Pages\ViewPost::route('/{record}'),
+            'index' => ListPosts::route('/'),
+            'create' => CreatePost::route('/create'),
+            'edit' => EditPost::route('/{record}/edit'),
+            'view' => ViewPost::route('/{record}'),
         ];
     }
 
