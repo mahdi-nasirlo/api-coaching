@@ -4,6 +4,8 @@ namespace App\Models\Blog;
 
 use App\Enums\PublishStatusEnum;
 use App\Models\Comment;
+use App\Models\User;
+use App\Observers\PostObserver;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,6 +20,9 @@ use Spatie\Tags\HasTags;
  * @property Carbon published_at
  * @property string image
  * @property PublishStatusEnum status
+ * @property int user_id
+ * @property User author
+ * @property Category category
  */
 class Post extends Model
 {
@@ -37,9 +42,14 @@ class Post extends Model
         'status' => PublishStatusEnum::class,
     ];
 
+    public static function booted(): void
+    {
+        self::observe(PostObserver::class);
+    }
+
     public function author(): BelongsTo
     {
-        return $this->belongsTo(Author::class, 'blog_author_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function category(): BelongsTo
