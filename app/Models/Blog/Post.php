@@ -2,13 +2,23 @@
 
 namespace App\Models\Blog;
 
+use App\Enums\PublishStatusEnum;
 use App\Models\Comment;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Spatie\Tags\HasTags;
 
+/**
+ * @property string title
+ * @property string slug
+ * @property string content
+ * @property Carbon published_at
+ * @property string image
+ * @property PublishStatusEnum status
+ */
 class Post extends Model
 {
     use HasFactory;
@@ -24,6 +34,7 @@ class Post extends Model
      */
     protected $casts = [
         'published_at' => 'date',
+        'status' => PublishStatusEnum::class,
     ];
 
     public function author(): BelongsTo

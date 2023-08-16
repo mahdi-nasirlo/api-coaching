@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\PublishStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,6 +19,7 @@ return new class() extends Migration
             $table->foreignId('blog_author_id')->nullable()->cascadeOnDelete();
             $table->foreignId('blog_category_id')->nullable()->nullOnDelete();
             $table->string('title');
+            $table->string('status')->default(PublishStatusEnum::Draft->value);
             $table->string('slug')->unique();
             $table->longText('content');
             $table->date('published_at')->nullable();

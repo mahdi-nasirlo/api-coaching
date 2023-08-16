@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Blog;
 
+use App\Enums\PublishStatusEnum;
 use App\Filament\App\Resources\Blog;
 use App\Filament\Resources\Blog\PostResource\Pages\CreatePost;
 use App\Filament\Resources\Blog\PostResource\Pages\EditPost;
@@ -24,6 +25,8 @@ use Filament\Infolists\Components;
 use Filament\Infolists\Infolist;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
@@ -72,11 +75,16 @@ class PostResource extends Resource
                     ->sortable()
                     ->toggleable(),
 
-                BadgeColumn::make('status')
+                BadgeColumn::make('is_published')
                     ->getStateUsing(fn(Post $record): string => $record->published_at?->isPast() ? 'Published' : 'Draft')
                     ->colors([
                         'success' => 'Published',
+                        'warning' => 'Draft'
                     ]),
+
+                TextColumn::make('status')
+                    ->badge()
+                    ->color(fn(?Post $post) => $post->status->getColor()),
 
                 TextColumn::make('category.name')
                     ->searchable()
@@ -124,11 +132,36 @@ class PostResource extends Resource
                     }),
             ])
             ->actions([
+                ActionGroup::make([
+
+                    Action::make('draft')
+                        ->action(fn(?Post $post) => $post->update(['status' => PublishStatusEnum::Draft]))
+                        ->visible(fn(?Post $post) => !$post->status->isDraft()),
+
+                    Action::make('reviewing')
+                        ->action(fn(?Post $post) => $post->update(['status' => PublishStatusEnum::Reviewing]))
+                        ->visible(fn(?Post $post) => !$post->status->isReviewing()),
+
+                    Action::make('published')
+                        ->action(fn(?Post $post) => $post->update(['status' => PublishStatusEnum::Published]))
+                        ->visible(fn(?Post $post) => !$post->status->isPublished()),
+
+                    Action::make('rejected')
+                        ->action(fn(?Post $post) => $post->update(['status' => PublishStatusEnum::Rejected]))
+                        ->visible(fn(?Post $post) => !$post->status->isRejected())
+                ])
+                    ->icon('heroicon-o-document-check')
+                    ->label('status')
+                    ->link()
+                    ->color('info'),
+
                 ViewAction::make(),
 
                 EditAction::make(),
 
                 DeleteAction::make(),
+
+
             ])
             ->groupedBulkActions([
                 DeleteBulkAction::make()
