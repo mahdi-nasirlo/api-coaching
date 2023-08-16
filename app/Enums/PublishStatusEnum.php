@@ -9,7 +9,7 @@ enum PublishStatusEnum: string
     case Published = 'published';
     case Rejected = 'rejected';
 
-    public function getLabel(): ?string
+    public function getLabel(): string|array|null
     {
         return match ($this) {
             self::Draft => 'Draft',
@@ -26,6 +26,16 @@ enum PublishStatusEnum: string
             self::Reviewing => 'warning',
             self::Published => 'success',
             self::Rejected => 'danger',
+        };
+    }
+
+    public function getIcon(): string|array|null
+    {
+        return match ($this) {
+            self::Draft => 'heroicon-s-paper-clip',
+            self::Reviewing => 'heroicon-o-clock',
+            self::Published => 'heroicon-m-check',
+            self::Rejected => 'heroicon-o-hand-thumb-down',
         };
     }
 
