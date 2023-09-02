@@ -37,7 +37,14 @@ class CategoryResource extends Resource
                     ->required()
                     ->maxValue(50)
                     ->live(onBlur: true)
-                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null),
+                    ->afterStateUpdated(fn(string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null),
+
+                Forms\Components\Select::make("parent_id")
+                    ->searchable()
+                    ->label("parent category")
+                    ->columnSpan(2)
+                    ->relationship("parent", "name", fn($query, ?Category $category) => $query->whereNot("id", $category?->id))
+                    ->preload(),
 
                 Forms\Components\TextInput::make('slug')
                     ->disabled()

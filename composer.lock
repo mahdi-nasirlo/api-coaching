@@ -13858,7 +13858,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "coolsam/modules": 10
+        "coolsam/modules": 10,
+        "fruitcake/laravel-cors": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
