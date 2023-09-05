@@ -10,7 +10,12 @@ class CategoryController extends Controller
 
     public function index()
     {
-        return Category::query()->get()->toTree();
+
+        $categories = Category::query()->where("is_visible", true)->get();
+
+        return $categories;
+
+//        return CategoryResource::make($categories);
     }
 
     public function show($id)
