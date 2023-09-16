@@ -3,6 +3,7 @@
 namespace Modules\Meeting\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
@@ -12,6 +13,7 @@ use Modules\Meeting\Enums\MeetingStatusEnums;
 use Modules\Meeting\Http\Requests\Meeting\CreateMeeting;
 use Modules\Meeting\Transformers\Meeting\AppointmentDaysResource;
 use Modules\Meeting\Transformers\Meeting\MeetingResource;
+use Morilog\Jalali\Jalalian;
 
 class MeetingController extends Controller
 {
@@ -31,6 +33,23 @@ class MeetingController extends Controller
         $meetings = $coach->meeting()->availableDate()->activeStatus()->get();
 
         return AppointmentDaysResource::collection($meetings);
+    }
+
+    public function getAppointmentDayTime(Request $request, Coach $coach)
+    {
+        $data = $request->validate([
+            'date' => 'required|date_format:Y-m-d'
+        ]);
+
+        $date = Jalalian::fromFormat('Y-m-d', $data['date'])->toCarbon();
+
+        $meetings = $coach->meeting()->where('date', '=', $date->format('Y-m-d'))->activeStatus()->get();
+
+        return Cache::remember(
+            'coachMeetingList-' . $data['date'] . $coach->uuid,
+            60 * 60 * 2,
+            fn() => MeetingResource::collection($meetings)
+        );
     }
 
     public function store(CreateMeeting $request, Coach $coach, PaymentService $paymentService): JsonResponse

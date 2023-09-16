@@ -3,9 +3,9 @@
 namespace Modules\Meeting\Transformers\Meeting;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Carbon;
 use Modules\Meeting\Entities\Meeting;
 use Modules\Meeting\services\MeetingService;
+use Morilog\Jalali\Jalalian;
 
 /**
  * @mixin Meeting
@@ -18,7 +18,7 @@ class MeetingResource extends JsonResource
             'id' => $this->id,
             'is_reserved ' => $this->status->isReserved(),
             'is_active' => $this->status->isActive(),
-            'date' => Carbon::parse($this->date)->format('Y/m/d'),
+            'date' => Jalalian::fromDateTime($this->date)->format('Y-m-d'),
             'time' => MeetingService::roundToNearest15Minutes($this->start_time) . " - " . MeetingService::roundToNearest15Minutes($this->end_time),
             'body' => $this->body,
         ];
