@@ -25,6 +25,7 @@
         "laravel/sanctum": "^3.2",
         "laravel/telescope": "^4.15",
         "laravel/tinker": "^2.8",
+        "marcin-orlowski/laravel-api-response-builder": "^10.0",
         "mokhosh/filament-jalali": "^3.1",
         "nwidart/laravel-modules": "^10.0",
         "shetabit/payment": "^5.4",

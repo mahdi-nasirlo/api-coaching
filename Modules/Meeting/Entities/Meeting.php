@@ -42,7 +42,7 @@ class Meeting extends Model
 
     public function ScopeAvailableDate($query)
     {
-        return $query->where('date', '>', Carbon::now()->subDays(7));
+        return $query->where('date', '>', Carbon::now());
     }
 
     public function coach(): BelongsTo

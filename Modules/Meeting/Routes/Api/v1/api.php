@@ -34,6 +34,8 @@ Route::prefix('meeting')->name('meeting.')->group(function () {
 
     Route::get('/coach/{coach}', [MeetingController::class, 'index'])->name('getAll');
 
+    Route::get('/coach/{coach:uuid}/getAppointmentDay', [MeetingController::class, "getAppointmentDay"])->name('get-appointment-day');
+
     Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('/create', [MeetingController::class, 'store'])->name('create');

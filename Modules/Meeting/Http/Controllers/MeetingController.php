@@ -10,6 +10,7 @@ use Modules\Meeting\Entities\Coach;
 use Modules\Meeting\Entities\Meeting;
 use Modules\Meeting\Enums\MeetingStatusEnums;
 use Modules\Meeting\Http\Requests\Meeting\CreateMeeting;
+use Modules\Meeting\Transformers\Meeting\AppointmentDaysResource;
 use Modules\Meeting\Transformers\Meeting\MeetingResource;
 
 class MeetingController extends Controller
@@ -23,6 +24,13 @@ class MeetingController extends Controller
             60 * 60 * 2,
             fn() => MeetingResource::collection($meetings)->collection->groupBy('date')
         );
+    }
+
+    public function getAppointmentDay(Coach $coach)
+    {
+        $meetings = $coach->meeting()->availableDate()->activeStatus()->get();
+
+        return AppointmentDaysResource::collection($meetings);
     }
 
     public function store(CreateMeeting $request, Coach $coach, PaymentService $paymentService): JsonResponse
